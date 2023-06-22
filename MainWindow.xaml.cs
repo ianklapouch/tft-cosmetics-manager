@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -21,6 +24,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using tft_cosmetics_manager.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace tft_cosmetics_manager
 {
@@ -36,10 +40,129 @@ namespace tft_cosmetics_manager
         private readonly List<int> mapSkinIds = new();
         private readonly List<int> damageSkinIds = new();
 
+        private readonly List<string> companionImages = new();
+
+
+
+        private ObservableCollection<string> items;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            // Inicializar a lista de itens
+            items = new ObservableCollection<string>();
+            //listBox.ItemsSource = items;
+
+            // Exemplo: Adicionar alguns itens à lista
+         
+
             Loaded += MainWindow_Loaded;
+        }
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+            //string text = "teste";
+            //// Converter a string de base64 para um BitmapImage
+            //var imageBytes = Convert.FromBase64String(companionImages[0]);
+            //var bitmapImage = new BitmapImage();
+            //bitmapImage.BeginInit();
+            //bitmapImage.StreamSource = new System.IO.MemoryStream(imageBytes);
+            //bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+            //bitmapImage.CreateOptions = BitmapCreateOptions.None;
+
+            //bitmapImage.EndInit();
+
+            //// Criar um StackPanel para agrupar a imagem e o texto
+            //var stackPanel = new StackPanel();
+            //stackPanel.Orientation = Orientation.Horizontal;
+
+            //// Criar um elemento de imagem
+            //var image = new System.Windows.Controls.Image();
+            //image.Source = bitmapImage;
+            //image.Width = 50;
+            //image.Height = 50;
+            //image.Margin = new Thickness(5);
+
+            //// Criar um elemento de texto
+            //var textBlock = new TextBlock();
+            //textBlock.Text = text;
+            //textBlock.VerticalAlignment = VerticalAlignment.Center;
+
+            //// Adicionar a imagem e o texto ao StackPanel
+            //stackPanel.Children.Add(image);
+            //stackPanel.Children.Add(textBlock);
+
+            //// Adicionar o StackPanel à ListBox
+            //listBox.Items.Add(stackPanel);
+
+            // Lista de dados de exemplo (representação Base64 da imagem e texto correspondente)
+            List<(string base64Image, string text)> items = new List<(string, string)>
+            {
+                (companionImages[0], "Texto 1"),
+                (companionImages[0], "Texto 2"),
+                (companionImages[0], "Texto 3")
+            };
+
+            List<Item> itemList = new List<Item>();
+
+            foreach (var item in items)
+            {
+                BitmapImage bitmapImage = LoadImageFromBase64(item.base64Image);
+                itemList.Add(new Item { Image = bitmapImage, Text = item.text });
+            }
+
+            // Defina a origem dos dados da ListView
+            itemListView.ItemsSource = itemList;
+        }
+
+        private BitmapImage LoadImageFromBase64(string base64Image)
+        {
+            byte[] imageData = Convert.FromBase64String(base64Image);
+            BitmapImage bitmapImage = new BitmapImage();
+
+            using (MemoryStream ms = new MemoryStream(imageData))
+            {
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = ms;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+            }
+
+            return bitmapImage;
+        }
+
+        // Classe de modelo para representar os itens da grade
+        public class Item : INotifyPropertyChanged
+        {
+            private BitmapImage image;
+            public BitmapImage Image
+            {
+                get { return image; }
+                set
+                {
+                    image = value;
+                    OnPropertyChanged("Image");
+                }
+            }
+
+            private string text;
+            public string Text
+            {
+                get { return text; }
+                set
+                {
+                    text = value;
+                    OnPropertyChanged("Text");
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            protected virtual void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -90,6 +213,7 @@ namespace tft_cosmetics_manager
             GetCompanions();
             GetMapSkins();
             GetDamageSkins();
+            _ = GetCompanionsImages();
             HideOverlay();
         }
         private void GetCompanions()
@@ -245,6 +369,48 @@ namespace tft_cosmetics_manager
                 }
             }
         }
+        private async Task<bool> GetCompanionsImages()
+        {
+            List<string> urls = await GetUrls();
+
+
+            string url = $"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/{urls[0]}";
+            string auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"riot:{token}"));
+
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
+            client.DefaultRequestHeaders.Add("ContentType", "application/json");
+
+
+            HttpResponseMessage response = await client.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                using MemoryStream memoryStream = new MemoryStream();
+                await response.Content.CopyToAsync(memoryStream);
+                string base64String = Convert.ToBase64String(memoryStream.ToArray());
+                companionImages.Add(base64String);
+                Console.WriteLine("Arquivo JPEG armazenado em memória.");
+            }
+
+            return true;
+
+        }
+        public async Task<List<string>> GetUrls()
+        {
+            using HttpClient client = new();
+            HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/companions.json");
+            if (!response.IsSuccessStatusCode)
+                return null;
+            // Lê o conteúdo retornado como uma string
+            string jsonContent = await response.Content.ReadAsStringAsync();
+
+            // Desserializa o JSON para um objeto
+            var jsonObject = JsonConvert.DeserializeObject<List<Companion>>(jsonContent);
+
+            List<Companion> companions = jsonObject.Where(obj => companionIds.Contains(obj.ItemId)).ToList();
+            return companions.Select(obj => obj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower()).ToList();
+        }
         private async Task<bool> SetCompanion()
         {
             Random random = new Random();
@@ -365,7 +531,6 @@ namespace tft_cosmetics_manager
                 }
             }
         }
-
         private async void RandomizeButton_Click(object sender, RoutedEventArgs e)
         {
             Button? button = FindName("randomizeButton") as Button;
@@ -396,11 +561,16 @@ namespace tft_cosmetics_manager
         {
             Overlay.Visibility = Visibility.Visible;
             Mouse.OverrideCursor = Cursors.Wait;
-            Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = null);
+            System.Windows.Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = null);
         }
         private void HideOverlay()
         {
             Overlay.Visibility = Visibility.Collapsed;
+        }
+
+        private void btnAdd_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
