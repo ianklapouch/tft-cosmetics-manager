@@ -27,20 +27,23 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ListBox x:Name="listBox" Margin="10">
-                <ListBox.ItemTemplate>
+            <ListView Name="itemListView" Margin="10">
+                <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding ImagePath}" Width="50" Height="50" Margin="5"/>
-                            <TextBlock Text="{Binding Text}" VerticalAlignment="Center"/>
-                        </StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Text}"  VerticalAlignment="Center"/>
+                            <Image Source="{Binding CompanionImage}" Grid.Column="1" Width="125" Height="75" Margin="5"/>
+                            <Image Source="{Binding Image}" Grid.Column="2" Width="100" Height="50" Margin="5"/>
+                            <Image Source="{Binding Image}" Grid.Column="3" Width="100" Height="50" Margin="5"/>
+                        </Grid>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-                <!--<ListBoxItem>Item 1</ListBoxItem>
-                <ListBoxItem>Item 2</ListBoxItem>
-                <ListBoxItem>Item 3</ListBoxItem>-->
-            </ListBox>
-            
+                </ListView.ItemTemplate>
+            </ListView>
+
 
 
             <Button 
@@ -52,23 +55,10 @@
              />
         </Grid>
 
-        <ListView Name="itemListView" Margin="10" VerticalAlignment="Bottom">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Image Source="{Binding Image}" Width="100" Height="100" Margin="5"/>
-                        <TextBlock Text="{Binding Text}" Grid.Column="1" VerticalAlignment="Center"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+  
 
 
-        <Button 
+        <!--<Button 
             Name="randomizeButton" 
             Click="RandomizeButton_Click"
             Foreground="#cad3f5" Margin="151,188,151,188"
@@ -82,7 +72,7 @@
                     </Border>
                 </ControlTemplate>
             </Button.Template>
-        </Button>
+        </Button>-->
 
 
         <Grid x:Name="Overlay" Background="#80000000" Visibility="Collapsed" Grid.ColumnSpan="2">

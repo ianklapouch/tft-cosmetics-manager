@@ -24,6 +24,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using tft_cosmetics_manager.Models;
+using tft_cosmetics_manager.Services;
+using tft_cosmetics_manager.ViewModel;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace tft_cosmetics_manager
@@ -40,94 +42,43 @@ namespace tft_cosmetics_manager
         private readonly List<int> mapSkinIds = new();
         private readonly List<int> damageSkinIds = new();
 
-        private readonly List<string> companionImages = new();
-
-
-
-        private ObservableCollection<string> items;
+        private ObservableCollection<Item> itemList = new ObservableCollection<Item>();
+        private readonly CompanionViewModel companionViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // Inicializar a lista de itens
-            items = new ObservableCollection<string>();
-            //listBox.ItemsSource = items;
+            IApiConfigService apiConfigService = new ApiConfigService();
+            companionViewModel = new(apiConfigService);
 
-            // Exemplo: Adicionar alguns itens à lista
-         
-
+            itemListView.ItemsSource = itemList;
             Loaded += MainWindow_Loaded;
         }
+
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            //string text = "teste";
-            //// Converter a string de base64 para um BitmapImage
-            //var imageBytes = Convert.FromBase64String(companionImages[0]);
-            //var bitmapImage = new BitmapImage();
-            //bitmapImage.BeginInit();
-            //bitmapImage.StreamSource = new System.IO.MemoryStream(imageBytes);
-            //bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-            //bitmapImage.CreateOptions = BitmapCreateOptions.None;
-
-            //bitmapImage.EndInit();
-
-            //// Criar um StackPanel para agrupar a imagem e o texto
-            //var stackPanel = new StackPanel();
-            //stackPanel.Orientation = Orientation.Horizontal;
-
-            //// Criar um elemento de imagem
-            //var image = new System.Windows.Controls.Image();
-            //image.Source = bitmapImage;
-            //image.Width = 50;
-            //image.Height = 50;
-            //image.Margin = new Thickness(5);
-
-            //// Criar um elemento de texto
-            //var textBlock = new TextBlock();
-            //textBlock.Text = text;
-            //textBlock.VerticalAlignment = VerticalAlignment.Center;
-
-            //// Adicionar a imagem e o texto ao StackPanel
-            //stackPanel.Children.Add(image);
-            //stackPanel.Children.Add(textBlock);
-
-            //// Adicionar o StackPanel à ListBox
-            //listBox.Items.Add(stackPanel);
-
-            // Lista de dados de exemplo (representação Base64 da imagem e texto correspondente)
-            List<(string base64Image, string text)> items = new List<(string, string)>
+            List<(string text, string base64Image)> newItems = new List<(string, string)>
             {
-                (companionImages[0], "Texto 1"),
-                (companionImages[0], "Texto 2"),
-                (companionImages[0], "Texto 3")
+                ("Profile 1", companionViewModel.companions[0].LoadoutsIcon),
             };
 
-            List<Item> itemList = new List<Item>();
-
-            foreach (var item in items)
+            foreach (var item in newItems)
             {
                 BitmapImage bitmapImage = LoadImageFromBase64(item.base64Image);
-                itemList.Add(new Item { Image = bitmapImage, Text = item.text });
+                itemList.Add(new Item { Text = item.text , CompanionImage = bitmapImage });
             }
-
-            // Defina a origem dos dados da ListView
-            itemListView.ItemsSource = itemList;
         }
+
+
+
 
         private BitmapImage LoadImageFromBase64(string base64Image)
         {
-            byte[] imageData = Convert.FromBase64String(base64Image);
             BitmapImage bitmapImage = new BitmapImage();
-
-            using (MemoryStream ms = new MemoryStream(imageData))
-            {
-                bitmapImage.BeginInit();
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.StreamSource = ms;
-                bitmapImage.EndInit();
-                bitmapImage.Freeze();
-            }
+            bitmapImage.BeginInit();
+            bitmapImage.UriSource = new Uri(base64Image);
+            bitmapImage.EndInit();
 
             return bitmapImage;
         }
@@ -135,17 +86,6 @@ namespace tft_cosmetics_manager
         // Classe de modelo para representar os itens da grade
         public class Item : INotifyPropertyChanged
         {
-            private BitmapImage image;
-            public BitmapImage Image
-            {
-                get { return image; }
-                set
-                {
-                    image = value;
-                    OnPropertyChanged("Image");
-                }
-            }
-
             private string text;
             public string Text
             {
@@ -156,6 +96,18 @@ namespace tft_cosmetics_manager
                     OnPropertyChanged("Text");
                 }
             }
+            private BitmapImage companionImage;
+            public BitmapImage CompanionImage
+            {
+                get { return companionImage; }
+                set
+                {
+                    companionImage = value;
+                    OnPropertyChanged("Image");
+                }
+            }
+
+        
 
             public event PropertyChangedEventHandler PropertyChanged;
 
@@ -168,104 +120,26 @@ namespace tft_cosmetics_manager
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ShowOverlay();
-            GetKeys();
+
+            LoadData();
         }
 
-        private void GetKeys()
+        private async Task LoadData()
         {
-            string command = "wmic";
-            string arguments = "PROCESS WHERE name='LeagueClientUx.exe' GET commandline";
+            bool hasLoadedCompanions = await companionViewModel.LoadCompanions();
 
-            Process process = new();
-
-            process.StartInfo.FileName = "cmd.exe";
-            process.StartInfo.Arguments = $"/C{command} {arguments}";
-            process.StartInfo.UseShellExecute = false;
-            process.StartInfo.RedirectStandardOutput = true;
-            process.StartInfo.RedirectStandardError = true;
-            process.StartInfo.CreateNoWindow = true;
-
-            process.Start();
-
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
-
-            process.WaitForExit();
-
-            Console.WriteLine("Saída: " + output);
-            Console.WriteLine("Erro: " + error);
-
-            string appPortPattern = "--app-port=([0-9]*)";
-            string authTokenPattern = "--remoting-auth-token=([\\w-]*)";
-
-            Match appPortMatch = Regex.Match(output, appPortPattern);
-            Match authTokenMatch = Regex.Match(output, authTokenPattern);
-
-            if (appPortMatch.Success && authTokenMatch.Success)
+            if (hasLoadedCompanions)
             {
-                port = appPortMatch.Groups[1].Value;
-                token = authTokenMatch.Groups[1].Value;
-                GetData();
+                HideOverlay();
             }
+
+
         }
         private void GetData()
         {
-            GetCompanions();
             GetMapSkins();
             GetDamageSkins();
-            _ = GetCompanionsImages();
             HideOverlay();
-        }
-        private void GetCompanions()
-        {
-            string url = $"https://127.0.0.1:{port}/lol-inventory/v1/inventory?inventoryTypes=%5B%22COMPANION%22%5D";
-            string auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"riot:{token}"));
-
-            ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            request.Headers.Add($"Authorization", $"Basic {auth}");
-            request.ContentType = "application/json";
-
-            try
-            {
-                var response = (HttpWebResponse)request.GetResponse();
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    throw new Exception("statusCode=" + response.StatusCode);
-                }
-
-                var body = new StringBuilder();
-                using (var responseStream = response.GetResponseStream())
-                {
-                    using var reader = new StreamReader(responseStream);
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        body.AppendLine(line);
-                    }
-                }
-
-                string responseBody = body.ToString();
-
-                var items = JsonConvert.DeserializeObject<List<Response>>(responseBody);
-                foreach (var item in items)
-                {
-                    companionIds.Add(item.ItemId);
-                }
-            }
-            catch (WebException ex)
-            {
-                if (ex.Response != null)
-                {
-                    using var errorResponse = (HttpWebResponse)ex.Response;
-                    Console.WriteLine("Error: " + errorResponse.StatusCode);
-                }
-                else
-                {
-                    Console.WriteLine("Error: " + ex.Message);
-                }
-            }
         }
         private void GetMapSkins()
         {
@@ -368,48 +242,6 @@ namespace tft_cosmetics_manager
                     Console.WriteLine("Error: " + ex.Message);
                 }
             }
-        }
-        private async Task<bool> GetCompanionsImages()
-        {
-            List<string> urls = await GetUrls();
-
-
-            string url = $"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/{urls[0]}";
-            string auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"riot:{token}"));
-
-            using HttpClient client = new();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
-            client.DefaultRequestHeaders.Add("ContentType", "application/json");
-
-
-            HttpResponseMessage response = await client.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
-            {
-                using MemoryStream memoryStream = new MemoryStream();
-                await response.Content.CopyToAsync(memoryStream);
-                string base64String = Convert.ToBase64String(memoryStream.ToArray());
-                companionImages.Add(base64String);
-                Console.WriteLine("Arquivo JPEG armazenado em memória.");
-            }
-
-            return true;
-
-        }
-        public async Task<List<string>> GetUrls()
-        {
-            using HttpClient client = new();
-            HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/companions.json");
-            if (!response.IsSuccessStatusCode)
-                return null;
-            // Lê o conteúdo retornado como uma string
-            string jsonContent = await response.Content.ReadAsStringAsync();
-
-            // Desserializa o JSON para um objeto
-            var jsonObject = JsonConvert.DeserializeObject<List<Companion>>(jsonContent);
-
-            List<Companion> companions = jsonObject.Where(obj => companionIds.Contains(obj.ItemId)).ToList();
-            return companions.Select(obj => obj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower()).ToList();
         }
         private async Task<bool> SetCompanion()
         {
@@ -557,6 +389,8 @@ namespace tft_cosmetics_manager
                 button.Content = "Randomize!";
             }
         }
+
+
         private void ShowOverlay()
         {
             Overlay.Visibility = Visibility.Visible;
@@ -566,11 +400,6 @@ namespace tft_cosmetics_manager
         private void HideOverlay()
         {
             Overlay.Visibility = Visibility.Collapsed;
-        }
-
-        private void btnAdd_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

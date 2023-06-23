@@ -10,5 +10,6 @@ namespace tft_cosmetics_manager.Models
     {
         public int ItemId { get; set; }
         public string LoadoutsIcon { get; set; }
+        public string Image { get; set; }
     }
 }
