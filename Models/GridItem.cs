@@ -20,6 +20,16 @@ namespace tft_cosmetics_manager.Models
                 OnPropertyChanged("Text");
             }
         }
+        private string companionId;
+        public string CompanionId
+        {
+            get { return companionId; }
+            set
+            {
+                companionId = value;
+                OnPropertyChanged("CompanionId");
+            }
+        }
         private BitmapImage companionImage;
         public BitmapImage CompanionImage
         {
@@ -27,7 +37,47 @@ namespace tft_cosmetics_manager.Models
             set
             {
                 companionImage = value;
-                OnPropertyChanged("Image");
+                OnPropertyChanged("CompanionImage");
+            }
+        }
+        private string mapSkinId;
+        public string MapSkinId
+        {
+            get { return mapSkinId; }
+            set
+            {
+                mapSkinId = value;
+                OnPropertyChanged("MapSkinId");
+            }
+        }
+        private BitmapImage mapSkinImage;
+        public BitmapImage MapSkinImage
+        {
+            get { return mapSkinImage; }
+            set
+            {
+                mapSkinImage = value;
+                OnPropertyChanged("MapSkinImage");
+            }
+        }
+        private string damageSkinId;
+        public string DamageSkinId
+        {
+            get { return damageSkinId; }
+            set
+            {
+                damageSkinId = value;
+                OnPropertyChanged("DamageSkinId");
+            }
+        }
+        private BitmapImage damageSkinImage;
+        public BitmapImage DamageSkinImage
+        {
+            get { return damageSkinImage; }
+            set
+            {
+                damageSkinImage = value;
+                OnPropertyChanged("DamageSkinImage");
             }
         }
 

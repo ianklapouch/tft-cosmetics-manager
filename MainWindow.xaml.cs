@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -40,6 +42,32 @@ namespace tft_cosmetics_manager
         private readonly MapSkinViewModel mapSkinViewModel;
         private readonly DamageSkinViewModel damageSkinViewModel;
 
+        private bool IsDarkThemeEnabled { get; set; } = false;
+
+        public void UpdateTheme(object sender, RoutedEventArgs e)
+        {
+            PaletteHelper palette = new PaletteHelper();
+
+            ITheme theme = palette.GetTheme();
+
+            if (IsDarkThemeEnabled)
+            {
+                theme.SetBaseTheme(Theme.Light);
+            }
+            else
+            {
+                theme.SetBaseTheme(Theme.Dark);
+            }
+            palette.SetTheme(theme);
+            IsDarkThemeEnabled = !IsDarkThemeEnabled;
+        }
+
+        private void DarkModeToggle_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -60,24 +88,58 @@ namespace tft_cosmetics_manager
             LoadData();
         }
 
+        private void ListViewItem_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var listViewItem = (ListViewItem)sender;
+            var selectedItem = (GridItem)listViewItem.DataContext;
+
+            if (selectedItem != null)
+            {
+                _ = companionViewModel.SetCompanion(selectedItem.CompanionId);
+                _ = mapSkinViewModel.SetMapSkin(selectedItem.MapSkinId);
+                _ = damageSkinViewModel.SetDamageSkin(selectedItem.DamageSkinId);
+            }
+        }
+
+
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            List<(string text, string base64Image)> newItems = new List<(string, string)>
+            Random random = new();
+            int randomIndex = random.Next(0, companionViewModel.companions.Count);
+            string companionId1 = companionViewModel.companions[randomIndex].ItemId.ToString();
+            string companionImage = companionViewModel.companions[randomIndex].LoadoutsIcon;
+
+            randomIndex = random.Next(0, mapSkinViewModel.mapSkins.Count);
+            string mapSkinId1 = mapSkinViewModel.mapSkins[randomIndex].ItemId.ToString();
+            string mapSkinImage = mapSkinViewModel.mapSkins[randomIndex].LoadoutsIcon;
+
+            randomIndex = random.Next(0, damageSkinViewModel.damageSkins.Count);
+            string damageSkinId1 = damageSkinViewModel.damageSkins[randomIndex].ItemId.ToString();
+            string damageSkinImage = damageSkinViewModel.damageSkins[randomIndex].LoadoutsIcon;
+
+
+            List<(string title, string companionId, string companionImage, string mapSkinId, string mapSkinImage, string damageSkinId, string damageSkinImage)> newItems = new()
             {
-                ("Profile 1", companionViewModel.companions[0].LoadoutsIcon),
-                ("Profile 2", mapSkinViewModel.mapSkins[0].LoadoutsIcon),
-                ("Profile 3", damageSkinViewModel.damageSkins[0].LoadoutsIcon),
+                ("Profile 1", companionId1, companionImage, mapSkinId1, mapSkinImage, damageSkinId1, damageSkinImage),
             };
+
 
             foreach (var item in newItems)
             {
-                BitmapImage bitmapImage = LoadImageFromBase64(item.base64Image);
-                itemList.Add(new GridItem { Text = item.text, CompanionImage = bitmapImage });
-            }
+                BitmapImage bitmapCompanionImage = LoadImageFromBase64(item.companionImage);
+                BitmapImage bitmapMapSkinImage = LoadImageFromBase64(item.mapSkinImage);
+                BitmapImage bitmapDamageSkinImage = LoadImageFromBase64(item.damageSkinImage);
 
-            _ = companionViewModel.SetRandom();
-            _ = mapSkinViewModel.SetRandom();
-            _ = damageSkinViewModel.SetRandom();
+                itemList.Add(new GridItem { 
+                    Text = item.title,
+                    CompanionId = item.companionId,
+                    CompanionImage = bitmapCompanionImage,
+                    MapSkinId = item.mapSkinId,
+                    MapSkinImage = bitmapMapSkinImage,
+                    DamageSkinId = item.damageSkinId,
+                    DamageSkinImage = bitmapDamageSkinImage 
+                });
+            }
         }
         private BitmapImage LoadImageFromBase64(string base64Image)
         {
@@ -101,29 +163,30 @@ namespace tft_cosmetics_manager
         }
         private async void RandomizeButton_Click(object sender, RoutedEventArgs e)
         {
-            //Button? button = FindName("randomizeButton") as Button;
+            Button? button = FindName("btnRandomize") as Button;
 
 
-            //if (button != null)
-            //{
-            //    button.IsEnabled = false;
-            //    button.Cursor = Cursors.No;
-            //    button.Content = "Loading...";
-            //}
+            if (button != null)
+            {
+                button.IsEnabled = false;
+                button.Cursor = Cursors.No;
+                button.Content = "Loading...";
+            }
 
 
-            //Task<bool> task1 = SetCompanion();
-            //Task<bool> task2 = SetMapSkin();
-            //Task<bool> task3 = SetDamageSkin();
-            //await Task.WhenAll(task1, task2, task3);
+            Task<bool> task1 = companionViewModel.SetCompanion();
+            Task<bool> task2 = mapSkinViewModel.SetMapSkin();
+            Task<bool> task3 = damageSkinViewModel.SetDamageSkin();
+
+            await Task.WhenAll(task1, task2, task3);
 
 
-            //if (button != null)
-            //{
-            //    button.IsEnabled = true;
-            //    button.Cursor = Cursors.Hand;
-            //    button.Content = "Randomize!";
-            //}
+            if (button != null)
+            {
+                button.IsEnabled = true;
+                button.Cursor = Cursors.Hand;
+                button.Content = "Randomize!";
+            }
         }
         private void ShowOverlay()
         {

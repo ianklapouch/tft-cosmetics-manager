@@ -92,11 +92,19 @@ namespace tft_cosmetics_manager.ViewModel
             return true;
         }
 
-        public async Task<bool> SetRandom()
+        public async Task<bool> SetMapSkin(string id = "")
         {
-            Random random = new();
-            int randomIndex = random.Next(0, mapSkins.Count);
-            string randomId = mapSkins[randomIndex].ItemId.ToString();
+            string selectedId;
+            if (string.IsNullOrEmpty(id))
+            {
+                Random random = new();
+                int randomIndex = random.Next(0, mapSkins.Count);
+                selectedId = mapSkins[randomIndex].ItemId.ToString();
+            }
+            else
+            {
+                selectedId = id;
+            }
 
             string url = $"{apiConfigService.BaseUrl}/lol-cosmetics/v1/selection/tft-map-skin";
             string auth = apiConfigService.Auth;
@@ -111,7 +119,7 @@ namespace tft_cosmetics_manager.ViewModel
 
             try
             {
-                byte[] data = Encoding.ASCII.GetBytes(randomId);
+                byte[] data = Encoding.ASCII.GetBytes(selectedId);
                 using var content = new ByteArrayContent(data);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 HttpResponseMessage response = await client.PutAsync(url, content);

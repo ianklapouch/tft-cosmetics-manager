@@ -4,76 +4,110 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Background="#24273a"
+        Background="{DynamicResource MaterialDesignDarkBackground}"
         Title="TFT Cosmetics Manager" Height="550" Width="900">
 
-    <Window.Resources>
+
+
+    <!--<Window.Resources>
         <Style TargetType="ListBoxItem">
             <Setter Property="Foreground" Value="Red" />
-            <!-- Cor do texto -->
+            -->
+    <!-- Cor do texto -->
+    <!--
             <Setter Property="BorderBrush" Value="Blue" />
-            <!-- Cor da borda -->
+            -->
+    <!-- Cor da borda -->
+    <!--
         </Style>
+        
 
 
+    </Window.Resources>-->
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Light Theme -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <!-- Dark Theme -->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="FrameworkElement" x:Key="AppStyle">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsDarkThemeEnabled}" Value="True">
+                        <Setter Property="Control.Background" Value="{DynamicResource MaterialDesignDarkBackground}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsDarkThemeEnabled}" Value="False">
+                        <Setter Property="Control.Background" Value="{DynamicResource MaterialDesignLightBackground}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
 
+
     <Grid>
-
-
         <Grid  VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <ListView Name="itemListView" Margin="10">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="PreviewMouseLeftButtonUp" Handler="ListViewItem_PreviewMouseLeftButtonUp" />
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Text}"  VerticalAlignment="Center"/>
-                            <Image Source="{Binding CompanionImage}" Grid.Column="1" Width="125" Height="75" Margin="5"/>
-                            <Image Source="{Binding Image}" Grid.Column="2" Width="100" Height="50" Margin="5"/>
-                            <Image Source="{Binding Image}" Grid.Column="3" Width="100" Height="50" Margin="5"/>
+                            <TextBlock Text="{Binding Text}"  VerticalAlignment="Center" Margin="5"/>
+
+                            <TextBlock Text="{Binding CompanionId}" Visibility="Hidden"/>
+                            <TextBlock Text="{Binding MapSkinId}" Visibility="Hidden"/>
+                            <TextBlock Text="{Binding DamageSkinId}" Visibility="Hidden"/>
+
+                            <Image Source="{Binding CompanionImage}" Grid.Column="1" Width="100" Height="100" Margin="5"/>
+                            <Image Source="{Binding MapSkinImage}" Grid.Column="2" Width="125" Height="75" Margin="5"/>
+                            <Image Source="{Binding DamageSkinImage}" Grid.Column="3" Width="125" Height="75" Margin="5"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
-
-
-            <Button 
+            <Button
                 Grid.Row="1"
-                Content="Adicionar novo item"
-                VerticalAlignment="Bottom"
+                Content="Add Item!"
                 Name="btnAdd"
-                Click="BtnAdd_Click"
-             />
+                Margin="20"
+                Style="{DynamicResource MaterialDesignRaisedLightButton}"
+                Click="BtnAdd_Click"/>
+
+            <Button
+                Grid.Row="2"
+                Content="Randomize!"
+                Name="btnRandomize"
+                Margin="20"
+                Style="{DynamicResource MaterialDesignRaisedLightButton}"
+                Click="RandomizeButton_Click"/>
+
         </Grid>
-
-  
-
-
-        <!--<Button 
-            Name="randomizeButton" 
-            Click="RandomizeButton_Click"
-            Foreground="#cad3f5" Margin="151,188,151,188"
-            Content="Randomize!"
-            Cursor="Hand"
-            >
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="#c6a0f6" BorderBrush="Gray" BorderThickness="1" CornerRadius="15">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
-        </Button>-->
-
 
         <Grid x:Name="Overlay" Background="#80000000" Visibility="Collapsed" Grid.ColumnSpan="2">
             <ProgressBar Width="200" Height="20" IsIndeterminate="True" VerticalAlignment="Center" HorizontalAlignment="Center" />
