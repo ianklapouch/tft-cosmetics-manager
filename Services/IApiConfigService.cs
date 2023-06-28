@@ -8,7 +8,7 @@ namespace tft_cosmetics_manager.Services
 {
     public interface IApiConfigService
     {
-        string BaseUrl { get; }
-        string Auth { get; }
+        //string BaseUrl { get; }
+        //string Auth { get; }
     }
 }

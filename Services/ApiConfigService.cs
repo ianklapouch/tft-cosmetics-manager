@@ -12,16 +12,9 @@ namespace tft_cosmetics_manager.Services
 {
     public class ApiConfigService : IApiConfigService
     {
-        public string BaseUrl { get; private set; }
-        public string Auth { get; private set; }
-
-        public ApiConfigService()
-        {
-            // Chame um método para buscar as chaves da API durante a construção do serviço
-            LoadApiKeys();
-        }
-
-        private void LoadApiKeys()
+        //public string BaseUrl { get; private set; }
+        //public string Auth { get; private set; }
+        public bool GetLCUKeys()
         {
             string command = "wmic";
             string arguments = "PROCESS WHERE name='LeagueClientUx.exe' GET commandline";
@@ -53,11 +46,11 @@ namespace tft_cosmetics_manager.Services
 
             if (appPortMatch.Success && authTokenMatch.Success)
             {
-                BaseUrl = $"https://127.0.0.1:{appPortMatch.Groups[1].Value}";
-                Auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"riot:{authTokenMatch.Groups[1].Value}"));
+                App.BaseUrl = $"https://127.0.0.1:{appPortMatch.Groups[1].Value}";
+                App.Auth = Convert.ToBase64String(Encoding.ASCII.GetBytes($"riot:{authTokenMatch.Groups[1].Value}"));
+                return true;
             }
+            return false;
         }
     }
-
-  
 }

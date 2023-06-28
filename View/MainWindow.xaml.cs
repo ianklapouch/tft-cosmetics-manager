@@ -27,7 +27,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using tft_cosmetics_manager.Models;
 using tft_cosmetics_manager.Services;
-using tft_cosmetics_manager.ViewModel;
+using tft_cosmetics_manager.ViewModels;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace tft_cosmetics_manager
@@ -72,10 +72,15 @@ namespace tft_cosmetics_manager
         {
             InitializeComponent();
 
-            IApiConfigService apiConfigService = new ApiConfigService();
-            companionViewModel = new(apiConfigService);
-            mapSkinViewModel = new(apiConfigService);
-            damageSkinViewModel = new(apiConfigService);
+            ApiConfigService apiConfigService = new();
+            bool hasLoadedLCUKeys = apiConfigService.GetLCUKeys();
+
+            if (hasLoadedLCUKeys)
+            {
+                companionViewModel = new();
+                mapSkinViewModel = new();
+                damageSkinViewModel = new();
+            }
 
             itemListView.ItemsSource = itemList;
             Loaded += MainWindow_Loaded;
@@ -84,7 +89,6 @@ namespace tft_cosmetics_manager
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ShowOverlay();
-
             LoadData();
         }
 
@@ -104,42 +108,45 @@ namespace tft_cosmetics_manager
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            Random random = new();
-            int randomIndex = random.Next(0, companionViewModel.companions.Count);
-            string companionId1 = companionViewModel.companions[randomIndex].ItemId.ToString();
-            string companionImage = companionViewModel.companions[randomIndex].LoadoutsIcon;
+            CreateProfile createProfile = new();
+            createProfile.Show();
+            //Random random = new();
+            //int randomIndex = random.Next(0, companionViewModel.companions.Count);
+            //string companionId1 = companionViewModel.companions[randomIndex].ItemId.ToString();
+            //string companionImage = companionViewModel.companions[randomIndex].LoadoutsIcon;
 
-            randomIndex = random.Next(0, mapSkinViewModel.mapSkins.Count);
-            string mapSkinId1 = mapSkinViewModel.mapSkins[randomIndex].ItemId.ToString();
-            string mapSkinImage = mapSkinViewModel.mapSkins[randomIndex].LoadoutsIcon;
+            //randomIndex = random.Next(0, mapSkinViewModel.mapSkins.Count);
+            //string mapSkinId1 = mapSkinViewModel.mapSkins[randomIndex].ItemId.ToString();
+            //string mapSkinImage = mapSkinViewModel.mapSkins[randomIndex].LoadoutsIcon;
 
-            randomIndex = random.Next(0, damageSkinViewModel.damageSkins.Count);
-            string damageSkinId1 = damageSkinViewModel.damageSkins[randomIndex].ItemId.ToString();
-            string damageSkinImage = damageSkinViewModel.damageSkins[randomIndex].LoadoutsIcon;
-
-
-            List<(string title, string companionId, string companionImage, string mapSkinId, string mapSkinImage, string damageSkinId, string damageSkinImage)> newItems = new()
-            {
-                ("Profile 1", companionId1, companionImage, mapSkinId1, mapSkinImage, damageSkinId1, damageSkinImage),
-            };
+            //randomIndex = random.Next(0, damageSkinViewModel.damageSkins.Count);
+            //string damageSkinId1 = damageSkinViewModel.damageSkins[randomIndex].ItemId.ToString();
+            //string damageSkinImage = damageSkinViewModel.damageSkins[randomIndex].LoadoutsIcon;
 
 
-            foreach (var item in newItems)
-            {
-                BitmapImage bitmapCompanionImage = LoadImageFromBase64(item.companionImage);
-                BitmapImage bitmapMapSkinImage = LoadImageFromBase64(item.mapSkinImage);
-                BitmapImage bitmapDamageSkinImage = LoadImageFromBase64(item.damageSkinImage);
+            //List<(string title, string companionId, string companionImage, string mapSkinId, string mapSkinImage, string damageSkinId, string damageSkinImage)> newItems = new()
+            //{
+            //    ("Profile 1", companionId1, companionImage, mapSkinId1, mapSkinImage, damageSkinId1, damageSkinImage),
+            //};
 
-                itemList.Add(new GridItem { 
-                    Text = item.title,
-                    CompanionId = item.companionId,
-                    CompanionImage = bitmapCompanionImage,
-                    MapSkinId = item.mapSkinId,
-                    MapSkinImage = bitmapMapSkinImage,
-                    DamageSkinId = item.damageSkinId,
-                    DamageSkinImage = bitmapDamageSkinImage 
-                });
-            }
+
+            //foreach (var item in newItems)
+            //{
+            //    BitmapImage bitmapCompanionImage = LoadImageFromBase64(item.companionImage);
+            //    BitmapImage bitmapMapSkinImage = LoadImageFromBase64(item.mapSkinImage);
+            //    BitmapImage bitmapDamageSkinImage = LoadImageFromBase64(item.damageSkinImage);
+
+            //    itemList.Add(new GridItem
+            //    {
+            //        Text = item.title,
+            //        CompanionId = item.companionId,
+            //        CompanionImage = bitmapCompanionImage,
+            //        MapSkinId = item.mapSkinId,
+            //        MapSkinImage = bitmapMapSkinImage,
+            //        DamageSkinId = item.damageSkinId,
+            //        DamageSkinImage = bitmapDamageSkinImage
+            //    });
+            //}
         }
         private BitmapImage LoadImageFromBase64(string base64Image)
         {

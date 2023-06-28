@@ -13,5 +13,7 @@ namespace tft_cosmetics_manager
     /// </summary>
     public partial class App : Application
     {
+        public static string BaseUrl { get; set; }
+        public static string Auth { get; set; }
     }
 }

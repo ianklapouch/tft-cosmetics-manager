@@ -1,42 +1,36 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Net.Http;
 using System.Threading.Tasks;
 using tft_cosmetics_manager.Models;
 using tft_cosmetics_manager.Services;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System;
 using System.Text;
 
-namespace tft_cosmetics_manager.ViewModel
+namespace tft_cosmetics_manager.ViewModels
 {
-    public class MapSkinViewModel
+    public class CompanionViewModel
     {
-        private readonly IApiConfigService apiConfigService;
-        public readonly List<MapSkin> mapSkins = new();
-        public MapSkinViewModel(IApiConfigService apiConfigService)
-        {
-            this.apiConfigService = apiConfigService;
-        }
+        public static List<Companion> Companions { get; } = new List<Companion>();
 
-        public async Task<bool> LoadMapSkins()
+        public async Task<bool> LoadCompanions()
         {
-            bool hasLoadedIds = await LoadMapSkinsIdsAsync().ConfigureAwait(false);
+            bool hasLoadedIds = await LoadCompanionsIdsAsync().ConfigureAwait(false);
             bool hasLoadedImagesPaths = false;
 
             if (hasLoadedIds)
             {
-                hasLoadedImagesPaths = await LoadMapSkinsImagesPathsAsync().ConfigureAwait(false);
+                hasLoadedImagesPaths = await LoadCompanionsImagesPathsAsync().ConfigureAwait(false);
             }
 
             return hasLoadedIds && hasLoadedImagesPaths;
         }
-
-        private async Task<bool> LoadMapSkinsIdsAsync()
+        private async Task<bool> LoadCompanionsIdsAsync()
         {
-            string url = $"{apiConfigService.BaseUrl}/lol-inventory/v1/inventory?inventoryTypes=%5B%22TFT_MAP_SKIN%22%5D";
-            string auth = apiConfigService.Auth;
+            string url = $"{App.BaseUrl}/lol-inventory/v1/inventory?inventoryTypes=%5B%22COMPANION%22%5D";
+            string auth = App.Auth;
 
             using HttpClientHandler handler = new();
             handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
@@ -58,56 +52,54 @@ namespace tft_cosmetics_manager.ViewModel
             var items = JsonConvert.DeserializeObject<List<Response>>(jsonResponse);
             foreach (var item in items)
             {
-                MapSkin mapSkin = new()
+                Companion companion = new()
                 {
                     ItemId = item.ItemId
                 };
-                mapSkins.Add(mapSkin);
+                Companions.Add(companion);
             }
 
             return true;
         }
-
-        private async Task<bool> LoadMapSkinsImagesPathsAsync()
+        private async Task<bool> LoadCompanionsImagesPathsAsync()
         {
             using HttpClient client = new();
-            HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/tftmapskins.json");
+            HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/companions.json");
 
             if (!response.IsSuccessStatusCode)
                 return false;
 
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            var jsonObjects = JsonConvert.DeserializeObject<List<MapSkin>>(jsonResponse);
+            var jsonObjects = JsonConvert.DeserializeObject<List<Companion>>(jsonResponse);
 
 
-            foreach (MapSkin mapSkin in mapSkins)
+            foreach (Companion companion in Companions)
             {
-                MapSkin responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == mapSkin.ItemId);
+                Companion responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == companion.ItemId);
                 if (responseObj != null)
                 {
-                    mapSkin.LoadoutsIcon = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
+                    companion.LoadoutsIcon = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
                 }
             }
 
             return true;
         }
-
-        public async Task<bool> SetMapSkin(string id = "")
+        public async Task<bool> SetCompanion(string id = "")
         {
             string selectedId;
             if (string.IsNullOrEmpty(id))
             {
                 Random random = new();
-                int randomIndex = random.Next(0, mapSkins.Count);
-                selectedId = mapSkins[randomIndex].ItemId.ToString();
+                int randomIndex = random.Next(0, Companions.Count);
+                selectedId = Companions[randomIndex].ItemId.ToString();
             }
             else
             {
                 selectedId = id;
             }
 
-            string url = $"{apiConfigService.BaseUrl}/lol-cosmetics/v1/selection/tft-map-skin";
-            string auth = apiConfigService.Auth;
+            string url = $"{App.BaseUrl}/lol-cosmetics/v1/selection/companion";
+            string auth = App.Auth;
 
             using HttpClientHandler handler = new();
             handler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
