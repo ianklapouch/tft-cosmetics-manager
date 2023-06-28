@@ -1,20 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace tft_cosmetics_manager.Services
 {
-    public class ApiConfigService : IApiConfigService
+    public class LCUService  
     {
-        //public string BaseUrl { get; private set; }
-        //public string Auth { get; private set; }
-        public bool GetLCUKeys()
+        public static bool FetchKeys()
         {
             string command = "wmic";
             string arguments = "PROCESS WHERE name='LeagueClientUx.exe' GET commandline";
@@ -34,9 +27,6 @@ namespace tft_cosmetics_manager.Services
             string error = process.StandardError.ReadToEnd();
 
             process.WaitForExit();
-
-            Console.WriteLine("Saída: " + output);
-            Console.WriteLine("Erro: " + error);
 
             string appPortPattern = "--app-port=([0-9]*)";
             string authTokenPattern = "--remoting-auth-token=([\\w-]*)";

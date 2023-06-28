@@ -72,8 +72,7 @@ namespace tft_cosmetics_manager
         {
             InitializeComponent();
 
-            ApiConfigService apiConfigService = new();
-            bool hasLoadedLCUKeys = apiConfigService.GetLCUKeys();
+            bool hasLoadedLCUKeys = LCUService.FetchKeys();
 
             if (hasLoadedLCUKeys)
             {
@@ -99,7 +98,7 @@ namespace tft_cosmetics_manager
 
             if (selectedItem != null)
             {
-                _ = companionViewModel.SetCompanion(selectedItem.CompanionId);
+                _ = CompanionViewModel.SetCompanion(selectedItem.CompanionId);
                 _ = mapSkinViewModel.SetMapSkin(selectedItem.MapSkinId);
                 _ = damageSkinViewModel.SetDamageSkin(selectedItem.DamageSkinId);
             }
@@ -108,58 +107,49 @@ namespace tft_cosmetics_manager
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            CreateProfile createProfile = new();
-            createProfile.Show();
-            //Random random = new();
-            //int randomIndex = random.Next(0, companionViewModel.companions.Count);
-            //string companionId1 = companionViewModel.companions[randomIndex].ItemId.ToString();
-            //string companionImage = companionViewModel.companions[randomIndex].LoadoutsIcon;
+            //CreateProfile createProfile = new();
+            //createProfile.Show();
+            Random random = new();
+            int randomIndex = random.Next(0, CompanionViewModel.Companions.Count);
+            string companionId1 = CompanionViewModel.Companions[randomIndex].ItemId.ToString();
+            string companionImage = CompanionViewModel.Companions[randomIndex].LoadoutsIcon;
 
-            //randomIndex = random.Next(0, mapSkinViewModel.mapSkins.Count);
-            //string mapSkinId1 = mapSkinViewModel.mapSkins[randomIndex].ItemId.ToString();
-            //string mapSkinImage = mapSkinViewModel.mapSkins[randomIndex].LoadoutsIcon;
+            randomIndex = random.Next(0, mapSkinViewModel.mapSkins.Count);
+            string mapSkinId1 = mapSkinViewModel.mapSkins[randomIndex].ItemId.ToString();
+            string mapSkinImage = mapSkinViewModel.mapSkins[randomIndex].LoadoutsIcon;
 
-            //randomIndex = random.Next(0, damageSkinViewModel.damageSkins.Count);
-            //string damageSkinId1 = damageSkinViewModel.damageSkins[randomIndex].ItemId.ToString();
-            //string damageSkinImage = damageSkinViewModel.damageSkins[randomIndex].LoadoutsIcon;
-
-
-            //List<(string title, string companionId, string companionImage, string mapSkinId, string mapSkinImage, string damageSkinId, string damageSkinImage)> newItems = new()
-            //{
-            //    ("Profile 1", companionId1, companionImage, mapSkinId1, mapSkinImage, damageSkinId1, damageSkinImage),
-            //};
+            randomIndex = random.Next(0, damageSkinViewModel.damageSkins.Count);
+            string damageSkinId1 = damageSkinViewModel.damageSkins[randomIndex].ItemId.ToString();
+            string damageSkinImage = damageSkinViewModel.damageSkins[randomIndex].LoadoutsIcon;
 
 
-            //foreach (var item in newItems)
-            //{
-            //    BitmapImage bitmapCompanionImage = LoadImageFromBase64(item.companionImage);
-            //    BitmapImage bitmapMapSkinImage = LoadImageFromBase64(item.mapSkinImage);
-            //    BitmapImage bitmapDamageSkinImage = LoadImageFromBase64(item.damageSkinImage);
+            List<(string title, string companionId, string companionImage, string mapSkinId, string mapSkinImage, string damageSkinId, string damageSkinImage)> newItems = new()
+            {
+                ("Profile 1", companionId1, companionImage, mapSkinId1, mapSkinImage, damageSkinId1, damageSkinImage),
+            };
 
-            //    itemList.Add(new GridItem
-            //    {
-            //        Text = item.title,
-            //        CompanionId = item.companionId,
-            //        CompanionImage = bitmapCompanionImage,
-            //        MapSkinId = item.mapSkinId,
-            //        MapSkinImage = bitmapMapSkinImage,
-            //        DamageSkinId = item.damageSkinId,
-            //        DamageSkinImage = bitmapDamageSkinImage
-            //    });
-            //}
-        }
-        private BitmapImage LoadImageFromBase64(string base64Image)
-        {
-            BitmapImage bitmapImage = new BitmapImage();
-            bitmapImage.BeginInit();
-            bitmapImage.UriSource = new Uri(base64Image);
-            bitmapImage.EndInit();
 
-            return bitmapImage;
+            foreach (var item in newItems)
+            {
+                BitmapImage bitmapCompanionImage = ImageService.CreateBitmapImageFromUrl(item.companionImage);
+                BitmapImage bitmapMapSkinImage = ImageService.CreateBitmapImageFromUrl(item.mapSkinImage);
+                BitmapImage bitmapDamageSkinImage = ImageService.CreateBitmapImageFromUrl(item.damageSkinImage);
+
+                itemList.Add(new GridItem
+                {
+                    Text = item.title,
+                    CompanionId = item.companionId,
+                    CompanionImage = bitmapCompanionImage,
+                    MapSkinId = item.mapSkinId,
+                    MapSkinImage = bitmapMapSkinImage,
+                    DamageSkinId = item.damageSkinId,
+                    DamageSkinImage = bitmapDamageSkinImage
+                });
+            }
         }
         private async Task LoadData()
         {
-            bool hasLoadedCompanions = await companionViewModel.LoadCompanions();
+            bool hasLoadedCompanions = await CompanionViewModel.LoadCompanions();
             bool hasLoadedMapSkins = await mapSkinViewModel.LoadMapSkins();
             bool hasLoadedDamageSkins = await damageSkinViewModel.LoadDamageSkins();
 
@@ -181,7 +171,7 @@ namespace tft_cosmetics_manager
             }
 
 
-            Task<bool> task1 = companionViewModel.SetCompanion();
+            Task<bool> task1 = CompanionViewModel.SetCompanion();
             Task<bool> task2 = mapSkinViewModel.SetMapSkin();
             Task<bool> task3 = damageSkinViewModel.SetDamageSkin();
 

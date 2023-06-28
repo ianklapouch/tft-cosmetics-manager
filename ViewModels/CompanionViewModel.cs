@@ -15,7 +15,7 @@ namespace tft_cosmetics_manager.ViewModels
     {
         public static List<Companion> Companions { get; } = new List<Companion>();
 
-        public async Task<bool> LoadCompanions()
+        public static async Task<bool> LoadCompanions()
         {
             bool hasLoadedIds = await LoadCompanionsIdsAsync().ConfigureAwait(false);
             bool hasLoadedImagesPaths = false;
@@ -27,7 +27,7 @@ namespace tft_cosmetics_manager.ViewModels
 
             return hasLoadedIds && hasLoadedImagesPaths;
         }
-        private async Task<bool> LoadCompanionsIdsAsync()
+        private static async Task<bool> LoadCompanionsIdsAsync()
         {
             string url = $"{App.BaseUrl}/lol-inventory/v1/inventory?inventoryTypes=%5B%22COMPANION%22%5D";
             string auth = App.Auth;
@@ -61,7 +61,7 @@ namespace tft_cosmetics_manager.ViewModels
 
             return true;
         }
-        private async Task<bool> LoadCompanionsImagesPathsAsync()
+        private static async Task<bool> LoadCompanionsImagesPathsAsync()
         {
             using HttpClient client = new();
             HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/companions.json");
@@ -84,7 +84,7 @@ namespace tft_cosmetics_manager.ViewModels
 
             return true;
         }
-        public async Task<bool> SetCompanion(string id = "")
+        public static async Task<bool> SetCompanion(string id = "")
         {
             string selectedId;
             if (string.IsNullOrEmpty(id))

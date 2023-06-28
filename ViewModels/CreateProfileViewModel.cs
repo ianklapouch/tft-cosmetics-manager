@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using tft_cosmetics_manager.Models;
+using tft_cosmetics_manager.Services;
 
 namespace tft_cosmetics_manager.ViewModels
 {
@@ -39,19 +40,9 @@ namespace tft_cosmetics_manager.ViewModels
         {
             foreach (Companion companion in CompanionViewModel.Companions)
             {
-                BitmapImage image = LoadImageFromBase64(companion.LoadoutsIcon);
-                CompanionUrls.Add(image);
+                BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(companion.LoadoutsIcon);
+                CompanionUrls.Add(bitmapImage);
             }
-        }
-
-        private BitmapImage LoadImageFromBase64(string base64Image)
-        {
-            BitmapImage bitmapImage = new BitmapImage();
-            bitmapImage.BeginInit();
-            bitmapImage.UriSource = new Uri(base64Image);
-            bitmapImage.EndInit();
-
-            return bitmapImage;
         }
     }
 }
