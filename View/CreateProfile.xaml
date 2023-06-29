@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
         Background="{DynamicResource MaterialDesignDarkBackground}"
          xmlns:VM="clr-namespace:tft_cosmetics_manager.ViewModels"
-        Title="Create Profile" Height="550" Width="900">
+        Title="Create Profile" Height="550" Width="950">
     <Window.DataContext>
         <VM:CreateProfileViewModel />
     </Window.DataContext>
@@ -45,19 +46,19 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
         <TextBox Grid.Row="0" Margin="10" />
 
         <TabControl Grid.Row="1">
-            <TabItem Header="Aba 1">
+            <TabItem Header="Companions">
                 <Grid>
-                    <!--<TextBlock Text="Conteúdo da Aba 1" HorizontalAlignment="Center" VerticalAlignment="Center" />-->
                     <ListBox 
-                        ItemsSource="{Binding CompanionUrls}"
-                        SelectedItem="{Binding SelectedImage}"
+                        ItemsSource="{Binding CompanionImages}"
+                        SelectedItem="{Binding SelectedCompanionImage}"
                         SelectionMode="Single"
                      >
                         <ListBox.ItemsPanel>
@@ -73,17 +74,57 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Aba 2">
+            <TabItem Header="Map Skin">
                 <Grid>
-                    <TextBlock Text="Conteúdo da Aba 2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <ListBox 
+                        ItemsSource="{Binding MapSkinImages}"
+                        SelectedItem="{Binding SelectedMapSkinImage}"
+                        SelectionMode="Single"
+                     >
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding}" Width="100" Height="100" Margin="5" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Aba 3">
+            <TabItem Header="Damage Skin">
                 <Grid>
-                    <TextBlock Text="Conteúdo da Aba 3" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <ListBox 
+                        ItemsSource="{Binding DamageSkinImages}"
+                        SelectedItem="{Binding SelectedDamageSkinImage}"
+                        SelectionMode="Single"
+                     >
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding}" Width="100" Height="100" Margin="5" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </TabItem>
         </TabControl>
+
+        <Button
+            Grid.Row="3"
+            Content="SAVE"
+            Name="btnSave"
+            HorizontalAlignment="Right"
+            Margin="20"
+            Width="100"
+            Style="{DynamicResource MaterialDesignRaisedLightButton}"
+            Click="BtnSave_Click"/>
 
         <Grid x:Name="Overlay" Background="#80000000" Visibility="Collapsed" Grid.ColumnSpan="2">
             <ProgressBar Width="200" Height="20" IsIndeterminate="True" VerticalAlignment="Center" HorizontalAlignment="Center" />

@@ -50,5 +50,11 @@ namespace tft_cosmetics_manager
         {
 
         }
+
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
+        {
+            CreateProfileViewModel viewModel = new CreateProfileViewModel();
+            viewModel.BtnSave_Click();
+        }
     }
 }

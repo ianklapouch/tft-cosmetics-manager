@@ -99,48 +99,57 @@ namespace tft_cosmetics_manager
             }
         }
 
+      
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-            //CreateProfile createProfile = new();
-            //createProfile.Show();
-            Random random = new();
-            int randomIndex = random.Next(0, CompanionService.Companions.Count);
-            string companionId1 = CompanionService.Companions[randomIndex].ItemId.ToString();
-            string companionImage = CompanionService.Companions[randomIndex].LoadoutsIcon;
+            this.IsEnabled = false;
+            CreateProfile createProfile = new();
+            createProfile.Owner = this;
+            createProfile.Closed += CreateProfile_Closed;
+            createProfile.Show();
+            //Random random = new();
+            //int randomIndex = random.Next(0, CompanionService.Companions.Count);
+            //string companionId1 = CompanionService.Companions[randomIndex].ItemId.ToString();
+            //string companionImage = CompanionService.Companions[randomIndex].LoadoutsIcon;
 
-            randomIndex = random.Next(0, MapSkinService.MapSkins.Count);
-            string mapSkinId1 = MapSkinService.MapSkins[randomIndex].ItemId.ToString();
-            string mapSkinImage = MapSkinService.MapSkins[randomIndex].LoadoutsIcon;
+            //randomIndex = random.Next(0, MapSkinService.MapSkins.Count);
+            //string mapSkinId1 = MapSkinService.MapSkins[randomIndex].ItemId.ToString();
+            //string mapSkinImage = MapSkinService.MapSkins[randomIndex].LoadoutsIcon;
 
-            randomIndex = random.Next(0, DamageSkinService.DamageSkins.Count);
-            string damageSkinId1 = DamageSkinService.DamageSkins[randomIndex].ItemId.ToString();
-            string damageSkinImage = DamageSkinService.DamageSkins[randomIndex].LoadoutsIcon;
-
-
-            List<(string title, string companionId, string companionImage, string mapSkinId, string mapSkinImage, string damageSkinId, string damageSkinImage)> newItems = new()
-            {
-                ("Profile 1", companionId1, companionImage, mapSkinId1, mapSkinImage, damageSkinId1, damageSkinImage),
-            };
+            //randomIndex = random.Next(0, DamageSkinService.DamageSkins.Count);
+            //string damageSkinId1 = DamageSkinService.DamageSkins[randomIndex].ItemId.ToString();
+            //string damageSkinImage = DamageSkinService.DamageSkins[randomIndex].LoadoutsIcon;
 
 
-            foreach (var item in newItems)
-            {
-                BitmapImage bitmapCompanionImage = ImageService.CreateBitmapImageFromUrl(item.companionImage);
-                BitmapImage bitmapMapSkinImage = ImageService.CreateBitmapImageFromUrl(item.mapSkinImage);
-                BitmapImage bitmapDamageSkinImage = ImageService.CreateBitmapImageFromUrl(item.damageSkinImage);
+            //List<(string title, string companionId, string companionImage, string mapSkinId, string mapSkinImage, string damageSkinId, string damageSkinImage)> newItems = new()
+            //{
+            //    ("Profile 1", companionId1, companionImage, mapSkinId1, mapSkinImage, damageSkinId1, damageSkinImage),
+            //};
 
-                itemList.Add(new GridItem
-                {
-                    Text = item.title,
-                    CompanionId = item.companionId,
-                    CompanionImage = bitmapCompanionImage,
-                    MapSkinId = item.mapSkinId,
-                    MapSkinImage = bitmapMapSkinImage,
-                    DamageSkinId = item.damageSkinId,
-                    DamageSkinImage = bitmapDamageSkinImage
-                });
-            }
+
+            //foreach (var item in newItems)
+            //{
+            //    BitmapImage bitmapCompanionImage = ImageService.CreateBitmapImageFromUrl(item.companionImage);
+            //    BitmapImage bitmapMapSkinImage = ImageService.CreateBitmapImageFromUrl(item.mapSkinImage);
+            //    BitmapImage bitmapDamageSkinImage = ImageService.CreateBitmapImageFromUrl(item.damageSkinImage);
+
+            //    itemList.Add(new GridItem
+            //    {
+            //        Text = item.title,
+            //        CompanionId = item.companionId,
+            //        CompanionImage = bitmapCompanionImage,
+            //        MapSkinId = item.mapSkinId,
+            //        MapSkinImage = bitmapMapSkinImage,
+            //        DamageSkinId = item.damageSkinId,
+            //        DamageSkinImage = bitmapDamageSkinImage
+            //    });
+            //}
+        }
+        private void CreateProfile_Closed(object sender, EventArgs e)
+        {
+            // Habilita a janela principal quando a janela modal for fechada
+            this.IsEnabled = true;
         }
         private async Task LoadData()
         {

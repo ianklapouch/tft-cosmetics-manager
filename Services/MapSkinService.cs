@@ -49,6 +49,7 @@ namespace tft_cosmetics_manager.Services
             string jsonResponse = await response.Content.ReadAsStringAsync();
 
             var items = JsonConvert.DeserializeObject<List<Response>>(jsonResponse);
+            items = items.OrderBy(e => e.ItemId).ToList();
             foreach (var item in items)
             {
                 MapSkin mapSkin = new()
