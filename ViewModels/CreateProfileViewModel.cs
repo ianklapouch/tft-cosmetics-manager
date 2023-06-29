@@ -14,7 +14,7 @@ namespace tft_cosmetics_manager.ViewModels
 {
     public class CreateProfileViewModel : INotifyPropertyChanged
     {
-        private readonly CompanionViewModel companionViewModel = new();
+        private readonly CompanionService companionViewModel = new();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -38,7 +38,7 @@ namespace tft_cosmetics_manager.ViewModels
 
         private async void LoadImagesAsync()
         {
-            foreach (Companion companion in CompanionViewModel.Companions)
+            foreach (Companion companion in CompanionService.Companions)
             {
                 BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(companion.LoadoutsIcon);
                 CompanionUrls.Add(bitmapImage);

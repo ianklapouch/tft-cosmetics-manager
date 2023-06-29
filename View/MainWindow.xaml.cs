@@ -27,7 +27,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using tft_cosmetics_manager.Models;
 using tft_cosmetics_manager.Services;
-using tft_cosmetics_manager.ViewModels;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace tft_cosmetics_manager
@@ -38,9 +37,6 @@ namespace tft_cosmetics_manager
     public partial class MainWindow : Window
     {
         private ObservableCollection<GridItem> itemList = new ObservableCollection<GridItem>();
-        private readonly CompanionViewModel companionViewModel;
-        private readonly MapSkinViewModel mapSkinViewModel;
-        private readonly DamageSkinViewModel damageSkinViewModel;
 
         private bool IsDarkThemeEnabled { get; set; } = false;
 
@@ -76,13 +72,11 @@ namespace tft_cosmetics_manager
 
             if (hasLoadedLCUKeys)
             {
-                companionViewModel = new();
-                mapSkinViewModel = new();
-                damageSkinViewModel = new();
+                itemListView.ItemsSource = itemList;
+                Loaded += MainWindow_Loaded;
             }
 
-            itemListView.ItemsSource = itemList;
-            Loaded += MainWindow_Loaded;
+           
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -93,14 +87,15 @@ namespace tft_cosmetics_manager
 
         private void ListViewItem_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+
             var listViewItem = (ListViewItem)sender;
             var selectedItem = (GridItem)listViewItem.DataContext;
 
             if (selectedItem != null)
             {
-                _ = CompanionViewModel.SetCompanion(selectedItem.CompanionId);
-                _ = mapSkinViewModel.SetMapSkin(selectedItem.MapSkinId);
-                _ = damageSkinViewModel.SetDamageSkin(selectedItem.DamageSkinId);
+                _ = CompanionService.SetCompanion(selectedItem.CompanionId);
+                _ = MapSkinService.SetMapSkin(selectedItem.MapSkinId);
+                _ = DamageSkinService.SetDamageSkin(selectedItem.DamageSkinId);
             }
         }
 
@@ -110,17 +105,17 @@ namespace tft_cosmetics_manager
             //CreateProfile createProfile = new();
             //createProfile.Show();
             Random random = new();
-            int randomIndex = random.Next(0, CompanionViewModel.Companions.Count);
-            string companionId1 = CompanionViewModel.Companions[randomIndex].ItemId.ToString();
-            string companionImage = CompanionViewModel.Companions[randomIndex].LoadoutsIcon;
+            int randomIndex = random.Next(0, CompanionService.Companions.Count);
+            string companionId1 = CompanionService.Companions[randomIndex].ItemId.ToString();
+            string companionImage = CompanionService.Companions[randomIndex].LoadoutsIcon;
 
-            randomIndex = random.Next(0, mapSkinViewModel.mapSkins.Count);
-            string mapSkinId1 = mapSkinViewModel.mapSkins[randomIndex].ItemId.ToString();
-            string mapSkinImage = mapSkinViewModel.mapSkins[randomIndex].LoadoutsIcon;
+            randomIndex = random.Next(0, MapSkinService.MapSkins.Count);
+            string mapSkinId1 = MapSkinService.MapSkins[randomIndex].ItemId.ToString();
+            string mapSkinImage = MapSkinService.MapSkins[randomIndex].LoadoutsIcon;
 
-            randomIndex = random.Next(0, damageSkinViewModel.damageSkins.Count);
-            string damageSkinId1 = damageSkinViewModel.damageSkins[randomIndex].ItemId.ToString();
-            string damageSkinImage = damageSkinViewModel.damageSkins[randomIndex].LoadoutsIcon;
+            randomIndex = random.Next(0, DamageSkinService.DamageSkins.Count);
+            string damageSkinId1 = DamageSkinService.DamageSkins[randomIndex].ItemId.ToString();
+            string damageSkinImage = DamageSkinService.DamageSkins[randomIndex].LoadoutsIcon;
 
 
             List<(string title, string companionId, string companionImage, string mapSkinId, string mapSkinImage, string damageSkinId, string damageSkinImage)> newItems = new()
@@ -149,9 +144,9 @@ namespace tft_cosmetics_manager
         }
         private async Task LoadData()
         {
-            bool hasLoadedCompanions = await CompanionViewModel.LoadCompanions();
-            bool hasLoadedMapSkins = await mapSkinViewModel.LoadMapSkins();
-            bool hasLoadedDamageSkins = await damageSkinViewModel.LoadDamageSkins();
+            bool hasLoadedCompanions = await CompanionService.FetchCompanions();
+            bool hasLoadedMapSkins = await MapSkinService.FetchMapSkins();
+            bool hasLoadedDamageSkins = await DamageSkinService.FetchDamageSkins();
 
             if (hasLoadedCompanions && hasLoadedMapSkins && hasLoadedDamageSkins)
             {
@@ -171,9 +166,9 @@ namespace tft_cosmetics_manager
             }
 
 
-            Task<bool> task1 = CompanionViewModel.SetCompanion();
-            Task<bool> task2 = mapSkinViewModel.SetMapSkin();
-            Task<bool> task3 = damageSkinViewModel.SetDamageSkin();
+            Task<bool> task1 = CompanionService.SetCompanion();
+            Task<bool> task2 = MapSkinService.SetMapSkin();
+            Task<bool> task3 = DamageSkinService.SetDamageSkin();
 
             await Task.WhenAll(task1, task2, task3);
 

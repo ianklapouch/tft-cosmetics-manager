@@ -6,30 +6,29 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Threading.Tasks;
 using tft_cosmetics_manager.Models;
-using tft_cosmetics_manager.Services;
 using System.Text;
 
-namespace tft_cosmetics_manager.ViewModels
+namespace tft_cosmetics_manager.Services
 {
-    public class DamageSkinViewModel
+    public class MapSkinService
     {
-        public readonly List<DamageSkin> damageSkins = new();
-        public async Task<bool> LoadDamageSkins()
+        public static List<MapSkin> MapSkins { get; } = new();
+        public static async Task<bool> FetchMapSkins()
         {
-            bool hasLoadedIds = await LoadDamageSkinsIdsAsync().ConfigureAwait(false);
-            bool hasLoadedImagesPaths = false;
+            bool hasFetchedIds = await FetchMapSkinsIdsAsync().ConfigureAwait(false);
+            bool hasFetchedImagesPaths = false;
 
-            if (hasLoadedIds)
+            if (hasFetchedIds)
             {
-                hasLoadedImagesPaths = await LoadDamageSkinsImagesPathsAsync().ConfigureAwait(false);
+                hasFetchedImagesPaths = await FetchMapSkinsImagesPathsAsync().ConfigureAwait(false);
             }
 
-            return hasLoadedIds && hasLoadedImagesPaths;
+            return hasFetchedIds && hasFetchedImagesPaths;
         }
 
-        private async Task<bool> LoadDamageSkinsIdsAsync()
+        private static async Task<bool> FetchMapSkinsIdsAsync()
         {
-            string url = $"{App.BaseUrl}/lol-inventory/v1/inventory?inventoryTypes=%5B%22TFT_DAMAGE_SKIN%22%5D";
+            string url = $"{App.BaseUrl}/lol-inventory/v1/inventory?inventoryTypes=%5B%22TFT_MAP_SKIN%22%5D";
             string auth = App.Auth;
 
             using HttpClientHandler handler = new();
@@ -52,20 +51,20 @@ namespace tft_cosmetics_manager.ViewModels
             var items = JsonConvert.DeserializeObject<List<Response>>(jsonResponse);
             foreach (var item in items)
             {
-                DamageSkin damageSkin = new()
+                MapSkin mapSkin = new()
                 {
                     ItemId = item.ItemId
                 };
-                damageSkins.Add(damageSkin);
+                MapSkins.Add(mapSkin);
             }
 
             return true;
         }
 
-        private async Task<bool> LoadDamageSkinsImagesPathsAsync()
+        private static async Task<bool> FetchMapSkinsImagesPathsAsync()
         {
             using HttpClient client = new();
-            HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/tftdamageskins.json");
+            HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/tftmapskins.json");
 
             if (!response.IsSuccessStatusCode)
                 return false;
@@ -74,33 +73,33 @@ namespace tft_cosmetics_manager.ViewModels
             var jsonObjects = JsonConvert.DeserializeObject<List<MapSkin>>(jsonResponse);
 
 
-            foreach (DamageSkin damageSkin in damageSkins)
+            foreach (MapSkin mapSkin in MapSkins)
             {
-                MapSkin responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == damageSkin.ItemId);
+                MapSkin responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == mapSkin.ItemId);
                 if (responseObj != null)
                 {
-                    damageSkin.LoadoutsIcon = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
+                    mapSkin.LoadoutsIcon = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
                 }
             }
 
             return true;
         }
 
-        public async Task<bool> SetDamageSkin(string id = "")
+        public static async Task<bool> SetMapSkin(string id = "")
         {
             string selectedId;
             if (string.IsNullOrEmpty(id))
             {
                 Random random = new();
-                int randomIndex = random.Next(0, damageSkins.Count);
-                selectedId = damageSkins[randomIndex].ItemId.ToString();
+                int randomIndex = random.Next(0, MapSkins.Count);
+                selectedId = MapSkins[randomIndex].ItemId.ToString();
             }
             else
             {
                 selectedId = id;
             }
 
-            string url = $"{App.BaseUrl}/lol-cosmetics/v1/selection/tft-damage-skin";
+            string url = $"{App.BaseUrl}/lol-cosmetics/v1/selection/tft-map-skin";
             string auth = App.Auth;
 
             using HttpClientHandler handler = new();

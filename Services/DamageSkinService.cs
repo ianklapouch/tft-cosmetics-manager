@@ -1,35 +1,34 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using System.Net.Http;
 using System.Threading.Tasks;
 using tft_cosmetics_manager.Models;
-using tft_cosmetics_manager.Services;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System;
 using System.Text;
 
-namespace tft_cosmetics_manager.ViewModels
+namespace tft_cosmetics_manager.Services
 {
-    public class CompanionViewModel
+    public class DamageSkinService
     {
-        public static List<Companion> Companions { get; } = new List<Companion>();
-
-        public static async Task<bool> LoadCompanions()
+        public static List<DamageSkin> DamageSkins { get; } = new();
+        public static async Task<bool> FetchDamageSkins()
         {
-            bool hasLoadedIds = await LoadCompanionsIdsAsync().ConfigureAwait(false);
-            bool hasLoadedImagesPaths = false;
+            bool hasFetchedIds = await FetchDamageSkinsIdsAsync().ConfigureAwait(false);
+            bool hasFetchedImagesPaths = false;
 
-            if (hasLoadedIds)
+            if (hasFetchedIds)
             {
-                hasLoadedImagesPaths = await LoadCompanionsImagesPathsAsync().ConfigureAwait(false);
+                hasFetchedImagesPaths = await FetchDamageSkinsImagesPathsAsync().ConfigureAwait(false);
             }
 
-            return hasLoadedIds && hasLoadedImagesPaths;
+            return hasFetchedIds && hasFetchedImagesPaths;
         }
-        private static async Task<bool> LoadCompanionsIdsAsync()
+
+        private static async Task<bool> FetchDamageSkinsIdsAsync()
         {
-            string url = $"{App.BaseUrl}/lol-inventory/v1/inventory?inventoryTypes=%5B%22COMPANION%22%5D";
+            string url = $"{App.BaseUrl}/lol-inventory/v1/inventory?inventoryTypes=%5B%22TFT_DAMAGE_SKIN%22%5D";
             string auth = App.Auth;
 
             using HttpClientHandler handler = new();
@@ -52,53 +51,55 @@ namespace tft_cosmetics_manager.ViewModels
             var items = JsonConvert.DeserializeObject<List<Response>>(jsonResponse);
             foreach (var item in items)
             {
-                Companion companion = new()
+                DamageSkin damageSkin = new()
                 {
                     ItemId = item.ItemId
                 };
-                Companions.Add(companion);
+                DamageSkins.Add(damageSkin);
             }
 
             return true;
         }
-        private static async Task<bool> LoadCompanionsImagesPathsAsync()
+
+        private static async Task<bool> FetchDamageSkinsImagesPathsAsync()
         {
             using HttpClient client = new();
-            HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/companions.json");
+            HttpResponseMessage response = await client.GetAsync("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/tftdamageskins.json");
 
             if (!response.IsSuccessStatusCode)
                 return false;
 
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            var jsonObjects = JsonConvert.DeserializeObject<List<Companion>>(jsonResponse);
+            var jsonObjects = JsonConvert.DeserializeObject<List<MapSkin>>(jsonResponse);
 
 
-            foreach (Companion companion in Companions)
+            foreach (DamageSkin damageSkin in DamageSkins)
             {
-                Companion responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == companion.ItemId);
+                MapSkin responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == damageSkin.ItemId);
                 if (responseObj != null)
                 {
-                    companion.LoadoutsIcon = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
+                    damageSkin.LoadoutsIcon = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
                 }
             }
 
             return true;
         }
-        public static async Task<bool> SetCompanion(string id = "")
+
+        public static async Task<bool> SetDamageSkin(string id = "")
         {
             string selectedId;
             if (string.IsNullOrEmpty(id))
             {
                 Random random = new();
-                int randomIndex = random.Next(0, Companions.Count);
-                selectedId = Companions[randomIndex].ItemId.ToString();
+                int randomIndex = random.Next(0, DamageSkins.Count);
+                selectedId = DamageSkins[randomIndex].ItemId.ToString();
             }
             else
             {
                 selectedId = id;
             }
 
-            string url = $"{App.BaseUrl}/lol-cosmetics/v1/selection/companion";
+            string url = $"{App.BaseUrl}/lol-cosmetics/v1/selection/tft-damage-skin";
             string auth = App.Auth;
 
             using HttpClientHandler handler = new();
