@@ -27,6 +27,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using tft_cosmetics_manager.Models;
 using tft_cosmetics_manager.Services;
+using tft_cosmetics_manager.View;
 using tft_cosmetics_manager.ViewModels;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -46,6 +47,14 @@ namespace tft_cosmetics_manager
             DataContext = new CreateProfileViewModel();
         }
 
+        public event EventHandler<SelectedDataEventArgs> DataSent;
+
+        // Método para chamar o evento ao fechar a janela
+        protected virtual void OnDataSent(SelectedDataEventArgs e)
+        {
+            DataSent?.Invoke(this, e);
+        }
+
         private void CreateProfile_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -53,8 +62,26 @@ namespace tft_cosmetics_manager
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            CreateProfileViewModel viewModel = new CreateProfileViewModel();
-            viewModel.BtnSave_Click();
+            CreateProfileViewModel? context = DataContext as CreateProfileViewModel;
+
+            string name = context.Name;
+            Companion companion = CompanionService.Companions.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedCompanionImage);
+            MapSkin mapSkin = MapSkinService.MapSkins.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedMapSkinImage);
+            DamageSkin damageSkin = DamageSkinService.DamageSkins.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedDamageSkinImage);
+
+            var args = new SelectedDataEventArgs()
+            {
+                Name = name,
+                Companion = companion,
+                MapSkin = mapSkin,
+                DamageSkin = damageSkin
+            };
+
+            OnDataSent(args);
+            this.Close();
         }
+
+        
+
     }
 }

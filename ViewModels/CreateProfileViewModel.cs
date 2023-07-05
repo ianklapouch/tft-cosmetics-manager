@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using GalaSoft.MvvmLight.Command;
+using Microsoft.Xaml.Behaviors.Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Xml.Linq;
 using tft_cosmetics_manager.Models;
 using tft_cosmetics_manager.Services;
 
@@ -17,11 +20,21 @@ namespace tft_cosmetics_manager.ViewModels
 {
     public class CreateProfileViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
         public List<BitmapImage> CompanionImages { get; } = new List<BitmapImage>();
         public List<BitmapImage> MapSkinImages { get; } = new List<BitmapImage>();
         public List<BitmapImage> DamageSkinImages { get; } = new List<BitmapImage>();
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(name)));
+            }
+        }
         private string selectedCompanionImage;
         public string SelectedCompanionImage
         {
@@ -52,10 +65,14 @@ namespace tft_cosmetics_manager.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(selectedDamageSkinImage)));
             }
         }
+
         public CreateProfileViewModel()
         {
+            name = "New Profile";
             LoadImages();
         }
+        //
+
 
         private void LoadImages()
         {
@@ -74,11 +91,6 @@ namespace tft_cosmetics_manager.ViewModels
                 BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(damageSkin.LoadoutsIcon);
                 DamageSkinImages.Add(bitmapImage);
             }
-        }
-
-        public void BtnSave_Click()
-        {
-            Application.Current.MainWindow.Close();
         }
     }
 }
