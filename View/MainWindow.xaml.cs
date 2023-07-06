@@ -100,6 +100,13 @@ namespace tft_cosmetics_manager
             }
         }
 
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Hello Stack Overflow!", "Test", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+        }
+
+ 
+
         private void CreateProfile_DataSent(object sender, SelectedDataEventArgs e)
         {
             itemList.Add(new GridItem
@@ -158,15 +165,19 @@ namespace tft_cosmetics_manager
                         MapSkin mapSkin = MapSkinService.MapSkins.FirstOrDefault(obj => obj.ItemId.ToString() == profile.MapSkinId);
                         DamageSkin damageSkin = DamageSkinService.DamageSkins.FirstOrDefault(obj => obj.ItemId.ToString() == profile.DamageSkinId);
 
+                        BitmapImage companionBitMapImage = ImageService.CreateBitmapImageFromUrl(companion.LoadoutsIcon);
+                        BitmapImage mapSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(mapSkin.LoadoutsIcon);
+                        BitmapImage damageSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(damageSkin.LoadoutsIcon);
+
                         itemList.Add(new GridItem
                         {
                             Text = profile.Title,
                             CompanionId = profile.CompanionId,
-                            CompanionImage = ImageService.CreateBitmapImageFromUrl(companion.LoadoutsIcon),
+                            CompanionImage = companionBitMapImage,
                             MapSkinId = profile.MapSkinId,
-                            MapSkinImage = ImageService.CreateBitmapImageFromUrl(mapSkin.LoadoutsIcon),
+                            MapSkinImage = mapSkinBitMapImage,
                             DamageSkinId = profile.DamageSkinId,
-                            DamageSkinImage = ImageService.CreateBitmapImageFromUrl(damageSkin.LoadoutsIcon)
+                            DamageSkinImage = damageSkinBitMapImage,
                         });
                     }
                 }

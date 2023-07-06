@@ -28,7 +28,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Teal.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="FrameworkElement" x:Key="AppStyle">
@@ -116,16 +116,35 @@
             </TabItem>
         </TabControl>
 
-        <Button
-            Grid.Row="3"
-            Content="SAVE"
-            Name="btnSave"
-            HorizontalAlignment="Right"
-            Margin="20"
-            Width="100"
-            Style="{DynamicResource MaterialDesignRaisedLightButton}"
-            Click="BtnSave_Click"/>
+        <Grid Grid.Row="3" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
+            <Button
+                Grid.Column="0"
+                Content="CANCEL"
+                Name="btnCancel"
+                HorizontalAlignment="Right"
+                Margin="20"
+                Width="100"
+                 Style="{DynamicResource MaterialDesignRaisedAccentButton}"
+                Click="BtnCancel_Click"/>
+
+            <Button
+                Grid.Column="1"
+                Content="SAVE"
+                Name="btnSave"
+                HorizontalAlignment="Right"
+                Margin="20"
+                Width="100"
+                Style="{DynamicResource MaterialDesignRaisedDarkButton}"
+                Click="BtnSave_Click"/>
+
+        </Grid>
+
+     
         <Grid x:Name="Overlay" Background="#80000000" Visibility="Collapsed" Grid.ColumnSpan="2">
             <ProgressBar Width="200" Height="20" IsIndeterminate="True" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Grid>

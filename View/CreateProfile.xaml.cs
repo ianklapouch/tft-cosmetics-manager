@@ -81,7 +81,9 @@ namespace tft_cosmetics_manager
             this.Close();
         }
 
-        
-
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
