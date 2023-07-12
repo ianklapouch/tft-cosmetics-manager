@@ -75,6 +75,10 @@ namespace tft_cosmetics_manager
             {
                 itemListView.ItemsSource = itemList;
                 Loaded += MainWindow_Loaded;
+            } else
+            {
+                MessageBox.Show("No running instance of League of Legends found, make sure the client is open and try again!", "Warning!");
+                System.Windows.Application.Current.Shutdown();
             }
 
 
