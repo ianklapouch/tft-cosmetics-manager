@@ -33,6 +33,15 @@ namespace tft_cosmetics_manager.Services
             if (profiles != null)
                 return profiles;
 
+            
+            for(int i = 0; i < profiles.Count; i++)
+            {
+                profiles[i].Id = i.ToString();
+            }
+
+            json = JsonConvert.SerializeObject(profiles, Formatting.Indented);
+            File.WriteAllText(FILE_PATH, json);
+
             return new List<Profile>();
         }
         private static void SaveProfiles(List<Profile> profiles)
@@ -48,9 +57,10 @@ namespace tft_cosmetics_manager.Services
             SaveProfiles(profiles);
         }
 
-        public static void RemoveProfile(Profile profile)
+        public static void RemoveProfile(string id)
         {
             List<Profile> profiles = LoadProfiles();
+            Profile profile = profiles.Find(p => p.Id == id);
             profiles.Remove(profile);
             SaveProfiles(profiles);
         }

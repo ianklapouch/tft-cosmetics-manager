@@ -10,6 +10,17 @@ namespace tft_cosmetics_manager.Models
 {
     public class GridItem : INotifyPropertyChanged
     {
+        private string id;
+        public string Id
+        {
+            get { return id; }
+            set
+            {
+                id= value;
+                OnPropertyChanged("Id");
+            }
+        }
+
         private string text;
         public string Text
         {

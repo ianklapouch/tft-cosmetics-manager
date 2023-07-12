@@ -72,6 +72,7 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Text}"  VerticalAlignment="Center" Margin="5"/>
 
+                            <TextBlock Text="{Binding Id}" Visibility="Hidden"/>
                             <TextBlock Text="{Binding CompanionId}" Visibility="Hidden"/>
                             <TextBlock Text="{Binding MapSkinId}" Visibility="Hidden"/>
                             <TextBlock Text="{Binding DamageSkinId}" Visibility="Hidden"/>

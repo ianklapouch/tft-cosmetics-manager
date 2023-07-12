@@ -57,28 +57,36 @@ namespace tft_cosmetics_manager
 
         private void CreateProfile_Loaded(object sender, RoutedEventArgs e)
         {
-
+            txtCreateProfile.Focus();
+            txtCreateProfile.SelectAll();
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             CreateProfileViewModel? context = DataContext as CreateProfileViewModel;
 
-            string name = context.Name;
-            Companion companion = CompanionService.Companions.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedCompanionImage);
-            MapSkin mapSkin = MapSkinService.MapSkins.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedMapSkinImage);
-            DamageSkin damageSkin = DamageSkinService.DamageSkins.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedDamageSkinImage);
-
-            var args = new SelectedDataEventArgs()
+            if (!string.IsNullOrEmpty(context.Name) && !string.IsNullOrEmpty(context.SelectedCompanionImage) && !string.IsNullOrEmpty(context.SelectedMapSkinImage) && !string.IsNullOrEmpty(context.SelectedDamageSkinImage))
             {
-                Name = name,
-                Companion = companion,
-                MapSkin = mapSkin,
-                DamageSkin = damageSkin
-            };
+                string name = context.Name;
+                Companion companion = CompanionService.Companions.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedCompanionImage);
+                MapSkin mapSkin = MapSkinService.MapSkins.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedMapSkinImage);
+                DamageSkin damageSkin = DamageSkinService.DamageSkins.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedDamageSkinImage);
 
-            OnDataSent(args);
-            this.Close();
+                var args = new SelectedDataEventArgs()
+                {
+                    Name = name,
+                    Companion = companion,
+                    MapSkin = mapSkin,
+                    DamageSkin = damageSkin
+                };
+
+                OnDataSent(args);
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Make sure to select items in all tabs and add a name before saving!", "Warning!", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+            }
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)

@@ -102,15 +102,34 @@ namespace tft_cosmetics_manager
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Hello Stack Overflow!", "Test", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+            MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this profile? this action cannot be undone!", "Warning!", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+
+            if (result == MessageBoxResult.OK)
+            {
+                Button clickedButton = (Button)sender;
+                GridItem selectedItem = (GridItem)clickedButton.DataContext;
+                string selectedId = selectedItem.Id;
+
+                ProfileService.RemoveProfile(selectedItem.Id);
+
+                GridItem itemToRemove = itemList.FirstOrDefault(item => item.Id == selectedId);
+
+                if (itemToRemove != null)
+                {
+                    itemList.Remove(itemToRemove);
+                }
+            }
         }
 
- 
+
 
         private void CreateProfile_DataSent(object sender, SelectedDataEventArgs e)
         {
+            string id = itemList.Count + 1.ToString();
+
             itemList.Add(new GridItem
             {
+                Id = id,
                 Text = e.Name,
                 CompanionId = e.Companion.ItemId.ToString(),
                 CompanionImage = ImageService.CreateBitmapImageFromUrl(e.Companion.LoadoutsIcon),
@@ -122,6 +141,7 @@ namespace tft_cosmetics_manager
 
             Profile profile = new()
             {
+                Id = id,
                 Title = e.Name,
                 CompanionId = e.Companion.ItemId.ToString(),
                 MapSkinId = e.MapSkin.ItemId.ToString(),
@@ -140,7 +160,7 @@ namespace tft_cosmetics_manager
             };
             createProfile.DataSent += CreateProfile_DataSent;
             createProfile.Closed += CreateProfile_Closed;
-            createProfile.Show();
+            createProfile.ShowDialog();
         }
         private void CreateProfile_Closed(object sender, EventArgs e)
         {
@@ -171,6 +191,7 @@ namespace tft_cosmetics_manager
 
                         itemList.Add(new GridItem
                         {
+                            Id = profile.Id,
                             Text = profile.Title,
                             CompanionId = profile.CompanionId,
                             CompanionImage = companionBitMapImage,
@@ -182,7 +203,7 @@ namespace tft_cosmetics_manager
                     }
                 }
 
-          
+
 
                 HideOverlay();
             }

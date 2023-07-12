@@ -2,6 +2,7 @@
 {
     public class Profile
     {
+        public string Id { get; set; }
         public string Title { get; set; }
         public string CompanionId { get; set; }
         public string MapSkinId { get; set; }

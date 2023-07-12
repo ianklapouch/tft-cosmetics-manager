@@ -51,7 +51,14 @@
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="0" Margin="10" Text="{Binding Name}" />
+        <TextBox 
+            Name="txtCreateProfile"
+            Grid.Row="0"
+            Margin="10"
+            FontSize="20"
+            Text="{Binding Name}" 
+            VerticalAlignment="Center"
+            Foreground="White" />
 
         <TabControl Grid.Row="1">
             <TabItem Header="Companions">
