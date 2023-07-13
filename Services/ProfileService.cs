@@ -17,32 +17,36 @@ namespace tft_cosmetics_manager.Services
 
         public static List<Profile> LoadProfiles()
         {
-            if (!Directory.Exists(FOLDER_PATH))
+            if (!Directory.Exists(FOLDER_PATH) || !File.Exists(FILE_PATH))
             {
-                Directory.CreateDirectory(FOLDER_PATH);
-            }
+                if (!Directory.Exists(FOLDER_PATH))
+                    Directory.CreateDirectory(FOLDER_PATH);
 
-            if (!File.Exists(FILE_PATH))
+                if (!File.Exists(FILE_PATH))
+                    File.Create(FILE_PATH);
+
+                return new List<Profile>();
+            }
+            else
             {
-                File.Create(FILE_PATH);
+                string json = File.ReadAllText(FILE_PATH);
+
+                List<Profile> profiles = JsonConvert.DeserializeObject<List<Profile>>(json);
+                if (profiles != null)
+                {
+                    for (int i = 0; i < profiles.Count; i++)
+                    {
+                        profiles[i].Id = i.ToString();
+                    }
+
+                    json = JsonConvert.SerializeObject(profiles, Formatting.Indented);
+                    File.WriteAllText(FILE_PATH, json);
+
+                    return profiles;
+                }
+
+                return new List<Profile>();
             }
-
-            string json = File.ReadAllText(FILE_PATH);
-
-            List<Profile> profiles = JsonConvert.DeserializeObject<List<Profile>>(json);
-            if (profiles != null)
-                return profiles;
-
-            
-            for(int i = 0; i < profiles.Count; i++)
-            {
-                profiles[i].Id = i.ToString();
-            }
-
-            json = JsonConvert.SerializeObject(profiles, Formatting.Indented);
-            File.WriteAllText(FILE_PATH, json);
-
-            return new List<Profile>();
         }
         private static void SaveProfiles(List<Profile> profiles)
         {
