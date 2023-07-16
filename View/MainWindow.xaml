@@ -6,6 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
+        Icon="\Assets\icon_256.png"
         Background="{DynamicResource MaterialDesignDarkBackground}"
         Title="TFT Cosmetics Manager" Height="550" Width="900">
 
@@ -26,7 +27,7 @@
 
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Teal.xaml" />
-                
+
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
 
 
@@ -114,7 +115,7 @@
                                     <materialDesign:PackIcon Kind="Delete"/>
                                 </Button>
                             </Grid>
-                            
+
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
