@@ -1,35 +1,43 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <RootNamespace>tft_cosmetics_manager</RootNamespace>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-	<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<RootNamespace>tft_cosmetics_manager</RootNamespace>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Assets\icon_128.png" />
-    <None Remove="Assets\icon_256.png" />
-    <None Remove="Assets\icon_379.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Assets\icon_128.png" />
+		<None Remove="Assets\icon_256.png" />
+		<None Remove="Assets\icon_379.png" />
+		<None Remove="Assets\rarity-icons\Epic.png" />
+		<None Remove="Assets\rarity-icons\Legendary.png" />
+		<None Remove="Assets\rarity-icons\Mythic.png" />
+		<None Remove="Assets\rarity-icons\Ultimate.png" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
-    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+		<PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+		<PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Include="App.xaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<Page Include="App.xaml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Assets\icon_128.png" />
-    <Resource Include="Assets\icon_256.png" />
-    <Resource Include="Assets\icon_379.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Assets\icon_128.png" />
+		<Resource Include="Assets\icon_256.png" />
+		<Resource Include="Assets\icon_379.png" />
+		<Resource Include="Assets\rarity-icons\Epic.png" />
+		<Resource Include="Assets\rarity-icons\Legendary.png" />
+		<Resource Include="Assets\rarity-icons\Mythic.png" />
+		<Resource Include="Assets\rarity-icons\Ultimate.png" />
+	</ItemGroup>
 
 </Project>

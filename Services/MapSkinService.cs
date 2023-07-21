@@ -71,15 +71,16 @@ namespace tft_cosmetics_manager.Services
                 return false;
 
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            var jsonObjects = JsonConvert.DeserializeObject<List<MapSkin>>(jsonResponse);
+            var jsonObjects = JsonConvert.DeserializeObject<List<MapSkinCDragon>>(jsonResponse);
 
 
             foreach (MapSkin mapSkin in MapSkins)
             {
-                MapSkin responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == mapSkin.ItemId);
+                MapSkinCDragon responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == mapSkin.ItemId);
                 if (responseObj != null)
                 {
-                    mapSkin.LoadoutsIcon = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
+                    mapSkin.Name = responseObj.Name;
+                    mapSkin.ImageUrl = $"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/{responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower()}";
                 }
             }
 

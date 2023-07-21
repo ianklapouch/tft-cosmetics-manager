@@ -70,15 +70,19 @@ namespace tft_cosmetics_manager.Services
                 return false;
 
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            var jsonObjects = JsonConvert.DeserializeObject<List<Companion>>(jsonResponse);
+            var jsonObjects = JsonConvert.DeserializeObject<List<CompanionCDragon>>(jsonResponse);
 
+            if (jsonObjects == null)
+                return false;
 
             foreach (Companion companion in Companions)
             {
-                Companion responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == companion.ItemId);
+                CompanionCDragon responseObj = jsonObjects.FirstOrDefault(obj => obj.ItemId == companion.ItemId);
                 if (responseObj != null)
                 {
-                    companion.LoadoutsIcon = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
+                    companion.Name = responseObj.Name;
+                    companion.ImageUrl = $"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/{responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower()}";
+                    companion.Rarity = responseObj.Rarity;
                 }
             }
 

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
@@ -20,11 +21,10 @@ namespace tft_cosmetics_manager.ViewModels
 {
     public class CreateProfileViewModel : INotifyPropertyChanged
     {
-        public List<BitmapImage> CompanionImages { get; } = new List<BitmapImage>();
-        public List<BitmapImage> MapSkinImages { get; } = new List<BitmapImage>();
-        public List<BitmapImage> DamageSkinImages { get; } = new List<BitmapImage>();
+        public List<GridItem> Companions { get; } = new();
+        public List<GridItem> MapSkins { get; } = new();
+        public List<GridItem> DamageSkins { get; } = new();
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private string name;
         public string Name
         {
@@ -35,62 +35,92 @@ namespace tft_cosmetics_manager.ViewModels
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(name)));
             }
         }
-        private string selectedCompanionImage;
-        public string SelectedCompanionImage
+        private GridItem selectedCompanion;
+        public GridItem SelectedCompanion
         {
-            get { return selectedCompanionImage; }
+            get => selectedCompanion;
             set
             {
-                selectedCompanionImage = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(selectedCompanionImage)));
+                selectedCompanion = value;
+                OnPropertyChanged(nameof(SelectedCompanion));
             }
         }
-        private string selectedMapSkinImage;
-        public string SelectedMapSkinImage
+        private GridItem selectedMapSkin;
+        public GridItem SelectedMapSkin
         {
-            get { return selectedMapSkinImage; }
+            get => selectedMapSkin;
             set
             {
-                selectedMapSkinImage = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(selectedMapSkinImage)));
-            }
-        }
-        private string selectedDamageSkinImage;
-        public string SelectedDamageSkinImage
-        {
-            get { return selectedDamageSkinImage; }
-            set
-            {
-                selectedDamageSkinImage = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(selectedDamageSkinImage)));
+                selectedMapSkin = value;
+                OnPropertyChanged(nameof(SelectedMapSkin));
             }
         }
 
+        private GridItem selectedDamageSkin;
+        public GridItem SelectedDamageSkin
+        {
+            get => selectedDamageSkin;
+            set
+            {
+                selectedDamageSkin = value;
+                OnPropertyChanged(nameof(SelectedDamageSkin));
+            }
+        }
         public CreateProfileViewModel()
         {
             name = "New Profile";
             LoadImages();
         }
-        //
-
 
         private void LoadImages()
         {
             foreach (Companion companion in CompanionService.Companions)
             {
-                BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(companion.LoadoutsIcon);
-                CompanionImages.Add(bitmapImage);
+                BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(companion.ImageUrl);
+                BitmapImage rarityBitMapImage = ImageService.CreateBitmapImageFromRelativeUrl($"/Assets/rarity-icons/{companion.Rarity}.png");
+
+                Companions.Add(new()
+                {
+                    ItemId = companion.ItemId,
+                    Name = companion.Name,
+                    Image = bitmapImage,
+                    RarityImage = rarityBitMapImage
+                });
             }
             foreach (MapSkin mapSkin in MapSkinService.MapSkins)
             {
-                BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(mapSkin.LoadoutsIcon);
-                MapSkinImages.Add(bitmapImage);
+                BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(mapSkin.ImageUrl);
+                MapSkins.Add(new()
+                {
+                    ItemId = mapSkin.ItemId,
+                    Name = mapSkin.Name,
+                    Image = bitmapImage
+                });
             }
             foreach (DamageSkin damageSkin in DamageSkinService.DamageSkins)
             {
-                BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(damageSkin.LoadoutsIcon);
-                DamageSkinImages.Add(bitmapImage);
+                BitmapImage bitmapImage = ImageService.CreateBitmapImageFromUrl(damageSkin.ImageUrl);
+                DamageSkins.Add(new()
+                {
+                    ItemId = damageSkin.ItemId,
+                    Name = damageSkin.Name,
+                    Image = bitmapImage
+                });
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+    public class GridItem
+    {
+        public int ItemId { get; set; }
+        public string Name { get; set; }
+        public BitmapImage Image { get; set; }
+        public BitmapImage RarityImage { get; set; }
     }
 }

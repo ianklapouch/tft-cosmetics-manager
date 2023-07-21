@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows.Automation;
 
 namespace tft_cosmetics_manager.Models
 {
     public class Companion
     {
         public int ItemId { get; set; }
-        public string LoadoutsIcon { get; set; }
-        public string Image { get; set; }
+        public string? Name { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? Rarity { get; set; }
     }
 }

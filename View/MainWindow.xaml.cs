@@ -1,34 +1,16 @@
 ﻿using MaterialDesignThemes.Wpf;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using tft_cosmetics_manager.Models;
 using tft_cosmetics_manager.Services;
 using tft_cosmetics_manager.View;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace tft_cosmetics_manager
 {
@@ -75,7 +57,8 @@ namespace tft_cosmetics_manager
             {
                 itemListView.ItemsSource = itemList;
                 Loaded += MainWindow_Loaded;
-            } else
+            }
+            else
             {
                 MessageBox.Show("No running instance of League of Legends found, make sure the client is open and try again!", "Warning!");
                 System.Windows.Application.Current.Shutdown();
@@ -131,16 +114,20 @@ namespace tft_cosmetics_manager
         {
             string id = itemList.Count + 1.ToString();
 
+            BitmapImage companionBitMapImage = ImageService.CreateBitmapImageFromUrl(e.Companion.ImageUrl);
+            BitmapImage mapSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(e.MapSkin.ImageUrl);
+            BitmapImage damageSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(e.DamageSkin.ImageUrl);
+
             itemList.Add(new GridItem
             {
                 Id = id,
                 Text = e.Name,
                 CompanionId = e.Companion.ItemId.ToString(),
-                CompanionImage = ImageService.CreateBitmapImageFromUrl(e.Companion.LoadoutsIcon),
+                CompanionImage = companionBitMapImage,
                 MapSkinId = e.MapSkin.ItemId.ToString(),
-                MapSkinImage = ImageService.CreateBitmapImageFromUrl(e.MapSkin.LoadoutsIcon),
+                MapSkinImage = mapSkinBitMapImage,
                 DamageSkinId = e.DamageSkin.ItemId.ToString(),
-                DamageSkinImage = ImageService.CreateBitmapImageFromUrl(e.DamageSkin.LoadoutsIcon)
+                DamageSkinImage = damageSkinBitMapImage
             });
 
             Profile profile = new()
@@ -185,13 +172,15 @@ namespace tft_cosmetics_manager
                     foreach (Profile profile in profiles)
                     {
 
+
                         Companion companion = CompanionService.Companions.FirstOrDefault(obj => obj.ItemId.ToString() == profile.CompanionId);
                         MapSkin mapSkin = MapSkinService.MapSkins.FirstOrDefault(obj => obj.ItemId.ToString() == profile.MapSkinId);
                         DamageSkin damageSkin = DamageSkinService.DamageSkins.FirstOrDefault(obj => obj.ItemId.ToString() == profile.DamageSkinId);
 
-                        BitmapImage companionBitMapImage = ImageService.CreateBitmapImageFromUrl(companion.LoadoutsIcon);
-                        BitmapImage mapSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(mapSkin.LoadoutsIcon);
-                        BitmapImage damageSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(damageSkin.LoadoutsIcon);
+                        BitmapImage companionBitMapImage = ImageService.CreateBitmapImageFromUrl(companion.ImageUrl);
+                        BitmapImage mapSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(mapSkin.ImageUrl);
+                        BitmapImage damageSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(damageSkin.ImageUrl);
+
 
                         itemList.Add(new GridItem
                         {

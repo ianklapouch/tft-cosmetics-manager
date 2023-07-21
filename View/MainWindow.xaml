@@ -90,7 +90,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Button
-                                    Visibility="Collapsed"
+                                    Visibility="Hidden"
                                     Grid.Column="0"
                                     HorizontalAlignment="Right"
                                     Margin="0 0 25 0"

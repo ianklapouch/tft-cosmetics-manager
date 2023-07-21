@@ -15,10 +15,10 @@
 
     <Window.Resources>
 
-      
-        
+
+
         <ResourceDictionary>
-              
+
             <ResourceDictionary.MergedDictionaries>
                 <!-- Light Theme -->
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
@@ -65,8 +65,8 @@
             <TabItem Header="Companions">
                 <Grid>
                     <ListBox 
-                        ItemsSource="{Binding CompanionImages}"
-                        SelectedItem="{Binding SelectedCompanionImage}"
+                        ItemsSource="{Binding Companions}"
+                        SelectedItem="{Binding SelectedCompanion}"
                         SelectionMode="Single"
                      >
                         <ListBox.ItemsPanel>
@@ -74,19 +74,116 @@
                                 <WrapPanel Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+                        
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding}" Width="100" Height="100" Margin="5" />
+                                <Grid>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="{Binding ItemId}" Visibility="Hidden"/>
+                                    
+
+                                    <TextBlock 
+                                        Grid.Row="0"
+                                        Text="{Binding Name}" 
+                                        HorizontalAlignment="Center"/>
+                                    
+                                    <Image 
+                                        Grid.Row="1"
+                                        Source="{Binding Image}"
+                                        Width="100" 
+                                        Height="100" 
+                                        Margin="5" />
+                
+                                     <Image 
+                                        Grid.Row="1"
+                                        Source="{Binding RarityImage}"
+                                        Width="65" 
+                                        Margin="0 67 0 0"/>
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
+                <!--<Grid>
+                    <ListBox 
+                        SelectionMode="Single"
+                     >
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Visibility="Hidden"/>
+
+
+                                    <TextBlock 
+                                        Grid.Row="0"
+                                        Text="Nome" 
+                                        HorizontalAlignment="Center"/>
+
+                                    <Image 
+                                        Grid.Row="1"
+                                        Width="100" 
+                                        Height="100" 
+                                        Margin="5" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+                        <ListBoxItem>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock 
+                                        Grid.Row="0"
+                                        Text="Nome" 
+                                        HorizontalAlignment="Center"/>
+
+                                <Image 
+                                        Grid.Row="1"
+                                        Width="100" 
+                                    Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png"
+                                    
+                                        Height="100" 
+                                        Margin="5" />
+
+                                <Image 
+                                        Grid.Row="1"
+                                        Width="65" 
+                                        Margin="0 67 0 0"
+                                        Source="\Assets\rarity-icons\Ultimate.png"/>
+
+                            </Grid>
+                        </ListBoxItem>
+                    </ListBox>
+                </Grid>-->
             </TabItem>
+
             <TabItem Header="Map Skin">
                 <Grid>
                     <ListBox 
-                        ItemsSource="{Binding MapSkinImages}"
-                        SelectedItem="{Binding SelectedMapSkinImage}"
+                        ItemsSource="{Binding MapSkins}"
+                        SelectedItem="{Binding SelectedMapSkin}"
                         SelectionMode="Single"
                      >
                         <ListBox.ItemsPanel>
@@ -94,19 +191,42 @@
                                 <WrapPanel Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding}" Width="100" Height="100" Margin="5" />
+                                <Grid>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="{Binding ItemId}" Visibility="Hidden"/>
+
+
+                                    <TextBlock 
+                                        Grid.Row="0"
+                                        Text="{Binding Name}" 
+                                        HorizontalAlignment="Center"/>
+
+                                    <Image 
+                                        Grid.Row="1"
+                                        Source="{Binding Image}"
+                                        Width="100" 
+                                        Height="100" 
+                                        Margin="5" />
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
             </TabItem>
+
             <TabItem Header="Damage Skin">
                 <Grid>
                     <ListBox 
-                        ItemsSource="{Binding DamageSkinImages}"
-                        SelectedItem="{Binding SelectedDamageSkinImage}"
+                        ItemsSource="{Binding DamageSkins}"
+                        SelectedItem="{Binding SelectedDamageSkin}"
                         SelectionMode="Single"
                      >
                         <ListBox.ItemsPanel>
@@ -114,14 +234,37 @@
                                 <WrapPanel Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding}" Width="100" Height="100" Margin="5" />
+                                <Grid>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="{Binding ItemId}" Visibility="Hidden"/>
+
+
+                                    <TextBlock 
+                                        Grid.Row="0"
+                                        Text="{Binding Name}" 
+                                        HorizontalAlignment="Center"/>
+
+                                    <Image 
+                                        Grid.Row="1"
+                                        Source="{Binding Image}"
+                                        Width="100" 
+                                        Height="100" 
+                                        Margin="5" />
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
             </TabItem>
+
         </TabControl>
 
         <Grid Grid.Row="3" HorizontalAlignment="Right">
@@ -152,7 +295,7 @@
 
         </Grid>
 
-     
+
         <Grid x:Name="Overlay" Background="#80000000" Visibility="Collapsed" Grid.ColumnSpan="2">
             <ProgressBar Width="200" Height="20" IsIndeterminate="True" VerticalAlignment="Center" HorizontalAlignment="Center" />
         </Grid>

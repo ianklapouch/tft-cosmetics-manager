@@ -65,12 +65,12 @@ namespace tft_cosmetics_manager
         {
             CreateProfileViewModel? context = DataContext as CreateProfileViewModel;
 
-            if (!string.IsNullOrEmpty(context.Name) && !string.IsNullOrEmpty(context.SelectedCompanionImage) && !string.IsNullOrEmpty(context.SelectedMapSkinImage) && !string.IsNullOrEmpty(context.SelectedDamageSkinImage))
+            if (!string.IsNullOrEmpty(context.Name) && context.SelectedCompanion != null && context.SelectedMapSkin != null && context.SelectedDamageSkin != null)
             {
                 string name = context.Name;
-                Companion companion = CompanionService.Companions.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedCompanionImage);
-                MapSkin mapSkin = MapSkinService.MapSkins.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedMapSkinImage);
-                DamageSkin damageSkin = DamageSkinService.DamageSkins.FirstOrDefault(obj => obj.LoadoutsIcon == context.SelectedDamageSkinImage);
+                Companion companion = CompanionService.Companions.FirstOrDefault(obj => obj.ItemId == context.SelectedCompanion.ItemId);
+                MapSkin mapSkin = MapSkinService.MapSkins.FirstOrDefault(obj => obj.ItemId == context.SelectedMapSkin.ItemId);
+                DamageSkin damageSkin = DamageSkinService.DamageSkins.FirstOrDefault(obj => obj.ItemId == context.SelectedDamageSkin.ItemId);
 
                 var args = new SelectedDataEventArgs()
                 {
