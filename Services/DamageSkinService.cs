@@ -81,6 +81,8 @@ namespace tft_cosmetics_manager.Services
                 {
                     damageSkin.Name = responseObj.Name;
                     damageSkin.ImageUrl = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/" + responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower();
+                    damageSkin.RarityValue = responseObj.RarityValue;
+                    damageSkin.Rarity = responseObj.Rarity;
                 }
             }
 

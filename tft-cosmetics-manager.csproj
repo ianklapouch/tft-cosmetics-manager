@@ -10,13 +10,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Remove="Assets\icon_128.png" />
 		<None Remove="Assets\icon_256.png" />
 		<None Remove="Assets\icon_379.png" />
-		<None Remove="Assets\rarity-icons\Epic.png" />
-		<None Remove="Assets\rarity-icons\Legendary.png" />
-		<None Remove="Assets\rarity-icons\Mythic.png" />
-		<None Remove="Assets\rarity-icons\Ultimate.png" />
+		<None Remove="Assets\Plating\Default.png" />
+		<None Remove="Assets\Plating\Epic.png" />
+		<None Remove="Assets\Plating\Legendary.png" />
+		<None Remove="Assets\Plating\Mythic.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -34,10 +37,10 @@
 		<Resource Include="Assets\icon_128.png" />
 		<Resource Include="Assets\icon_256.png" />
 		<Resource Include="Assets\icon_379.png" />
-		<Resource Include="Assets\rarity-icons\Epic.png" />
-		<Resource Include="Assets\rarity-icons\Legendary.png" />
-		<Resource Include="Assets\rarity-icons\Mythic.png" />
-		<Resource Include="Assets\rarity-icons\Ultimate.png" />
+		<Resource Include="Assets\Plating\Default.png" />
+		<Resource Include="Assets\Plating\Epic.png" />
+		<Resource Include="Assets\Plating\Legendary.png" />
+		<Resource Include="Assets\Plating\Mythic.png" />
 	</ItemGroup>
 
 </Project>

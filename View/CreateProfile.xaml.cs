@@ -93,5 +93,6 @@ namespace tft_cosmetics_manager
         {
             this.Close();
         }
+
     }
 }

@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Icon="\Assets\icon_256.png"
         Background="{DynamicResource MaterialDesignDarkBackground}"
-        Title="TFT Cosmetics Manager" Height="550" Width="900">
+        Title="TFT Cosmetics Manager" Height="800" Width="965">
 
 
 

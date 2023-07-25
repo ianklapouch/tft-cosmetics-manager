@@ -6,16 +6,15 @@
         mc:Ignorable="d"
           Icon="\Assets\icon_256.png"
         WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
         Background="{DynamicResource MaterialDesignDarkBackground}"
          xmlns:VM="clr-namespace:tft_cosmetics_manager.ViewModels"
-        Title="Create Profile" Height="550" Width="950">
+        Title="Create Profile" Height="800" Width="965">
     <Window.DataContext>
         <VM:CreateProfileViewModel />
     </Window.DataContext>
 
     <Window.Resources>
-
-
 
         <ResourceDictionary>
 
@@ -64,7 +63,41 @@
         <TabControl Grid.Row="1">
             <TabItem Header="Companions">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock 
+                            Margin="20 0 0 0"
+                            Grid.Column="0"
+                            Text="Order by: "
+                            FontSize="20"
+                            Foreground="White"/>
+
+                        <Button 
+                            Grid.Column="1" 
+                            Content="Name" 
+                            Margin="20 0 0 0"
+                            Command="{Binding SortCompanionsNameCommand}" />
+                        
+                        <Button 
+                            Grid.Column="2" 
+                            Content="Rarity" 
+                            Margin="20 0 0 0"
+                            Command="{Binding SortCompanionsRarityCommand}" />
+                    </Grid>
+
                     <ListBox 
+                        Grid.Row="1"
                         ItemsSource="{Binding Companions}"
                         SelectedItem="{Binding SelectedCompanion}"
                         SelectionMode="Single"
@@ -74,37 +107,46 @@
                                 <WrapPanel Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
-                        
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="110"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Text="{Binding ItemId}" Visibility="Hidden"/>
-                                    
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
 
-                                    <TextBlock 
+                                    <TextBlock Text="{Binding ItemId}" Visibility="Hidden"/>
+
+
+                                    <TextBlock Grid.Column="0"
                                         Grid.Row="0"
-                                        Text="{Binding Name}" 
+                                               TextWrapping="Wrap"
+                                         Text="{Binding Name}" 
                                         HorizontalAlignment="Center"/>
-                                    
-                                    <Image 
-                                        Grid.Row="1"
-                                        Source="{Binding Image}"
+
+                                    <Canvas Grid.Row="1" Grid.Column="0">
+
+                                        <Image 
                                         Width="100" 
-                                        Height="100" 
-                                        Margin="5" />
-                
-                                     <Image 
-                                        Grid.Row="1"
-                                        Source="{Binding RarityImage}"
-                                        Width="65" 
-                                        Margin="0 67 0 0"/>
+                                          Source="{Binding Image}"
+                                        Height="100"/>
+
+                                        <Image                       
+                                        Width="65"
+                                        Canvas.Top="68"
+                                                Source="{Binding PlatingImage}"
+                                        Canvas.Left="19"
+                                        >
+                                        </Image>
+
+                                    </Canvas>
+
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -150,38 +192,79 @@
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="110"/>
                                 </Grid.RowDefinitions>
 
-                                <TextBlock 
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
                                         Grid.Row="0"
                                         Text="Nome" 
                                         HorizontalAlignment="Center"/>
 
-                                <Image 
-                                        Grid.Row="1"
-                                        Width="100" 
-                                    Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png"
-                                    
-                                        Height="100" 
-                                        Margin="5" />
+                                <Canvas Grid.Row="1" Grid.Column="0">
 
-                                <Image 
-                                        Grid.Row="1"
-                                        Width="65" 
-                                        Margin="0 67 0 0"
-                                        Source="\Assets\rarity-icons\Ultimate.png"/>
+                                    <Image 
+                                        Width="100" 
+                                        Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png"
+                                        Height="100"/>
+
+                                    <Image                       
+                                        Width="65"
+                                        Canvas.Top="68"
+                                        Source="\Assets\Plating\Default.png"
+                                        Canvas.Left="19"
+                                        >
+                                    </Image>
+
+                                </Canvas>
 
                             </Grid>
                         </ListBoxItem>
                     </ListBox>
                 </Grid>-->
+
             </TabItem>
 
             <TabItem Header="Map Skin">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock 
+                            Margin="20 0 0 0"
+                            Grid.Column="0"
+                            Text="Order by: "
+                            FontSize="20"
+                            Foreground="White"/>
+
+                        <Button 
+                            Grid.Column="1" 
+                            Content="Name" 
+                            Margin="20 0 0 0"
+                            Command="{Binding SortMapSkinsNameCommand}" />
+
+                        <Button 
+                            Grid.Column="2" 
+                            Content="Rarity" 
+                            Margin="20 0 0 0"
+                            Command="{Binding SortMapSkinsRarityCommand}" />
+                    </Grid>
+
                     <ListBox 
+                        Grid.Row="1"
                         ItemsSource="{Binding MapSkins}"
                         SelectedItem="{Binding SelectedMapSkin}"
                         SelectionMode="Single"
@@ -198,33 +281,87 @@
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="110"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Text="{Binding ItemId}" Visibility="Hidden"/>
-
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
 
                                     <TextBlock 
+                                        Text="{Binding ItemId}"
+                                        Visibility="Hidden"/>
+
+                                    <TextBlock 
+                                        Grid.Column="0"
                                         Grid.Row="0"
+                                        TextWrapping="Wrap"
                                         Text="{Binding Name}" 
                                         HorizontalAlignment="Center"/>
 
-                                    <Image 
-                                        Grid.Row="1"
-                                        Source="{Binding Image}"
-                                        Width="100" 
-                                        Height="100" 
-                                        Margin="5" />
+                                    <Canvas 
+                                        Grid.Row="1" 
+                                        Grid.Column="0">
+
+                                        <Image 
+                                            Width="100" 
+                                            Source="{Binding Image}"
+                                            Height="100"/>
+
+                                        <Image                       
+                                            Width="65"
+                                            Canvas.Top="85"
+                                             Source="{Binding PlatingImage}"
+                                            Canvas.Left="19">
+                                        </Image>
+
+                                    </Canvas>
                                 </Grid>
+
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
+
             </TabItem>
 
             <TabItem Header="Damage Skin">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock 
+                            Margin="20 0 0 0"
+                            Grid.Column="0"
+                            Text="Order by: "
+                            FontSize="20"
+                            Foreground="White"/>
+
+                        <Button 
+                            Grid.Column="1" 
+                            Content="Name" 
+                            Margin="20 0 0 0"
+                            Command="{Binding SortDamageSkinsNameCommand}" />
+
+                        <Button 
+                            Grid.Column="2" 
+                            Content="Rarity" 
+                            Margin="20 0 0 0"
+                            Command="{Binding SortDamageSkinsRarityCommand}" />
+                    </Grid>
+
                     <ListBox 
+                        Grid.Row="1"
                         ItemsSource="{Binding DamageSkins}"
                         SelectedItem="{Binding SelectedDamageSkin}"
                         SelectionMode="Single"
@@ -241,24 +378,43 @@
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="110"/>
                                     </Grid.RowDefinitions>
 
-                                    <TextBlock Text="{Binding ItemId}" Visibility="Hidden"/>
-
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
 
                                     <TextBlock 
+                                        Text="{Binding ItemId}"
+                                        Visibility="Hidden"/>
+
+                                    <TextBlock 
+                                        Grid.Column="0"
                                         Grid.Row="0"
                                         Text="{Binding Name}" 
+                                        TextWrapping="Wrap"
                                         HorizontalAlignment="Center"/>
 
-                                    <Image 
-                                        Grid.Row="1"
-                                        Source="{Binding Image}"
-                                        Width="100" 
-                                        Height="100" 
-                                        Margin="5" />
+                                    <Canvas 
+                                        Grid.Row="1" 
+                                        Grid.Column="0">
+
+                                        <Image 
+                                            Width="100" 
+                                            Source="{Binding Image}"
+                                            Height="100"/>
+
+                                        <Image                       
+                                            Width="65"
+                                            Canvas.Top="85"
+                                             Source="{Binding PlatingImage}"
+                                            Canvas.Left="19">
+                                        </Image>
+
+                                    </Canvas>
                                 </Grid>
+
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

@@ -82,6 +82,7 @@ namespace tft_cosmetics_manager.Services
                 {
                     companion.Name = responseObj.Name;
                     companion.ImageUrl = $"https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/{responseObj.LoadoutsIcon.Replace("/lol-game-data/assets/", "").ToLower()}";
+                    companion.RarityValue = responseObj.RarityValue;
                     companion.Rarity = responseObj.Rarity;
                 }
             }
