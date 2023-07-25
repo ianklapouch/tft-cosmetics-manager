@@ -205,8 +205,24 @@
 
         </Grid>
 
-        <Grid x:Name="Overlay" Background="#80000000" Visibility="Collapsed" Grid.ColumnSpan="2">
-            <ProgressBar Width="200" Height="20" IsIndeterminate="True" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <Grid x:Name="Overlay" Background="#80000000" Visibility="Hidden" VerticalAlignment="Stretch" Height="Auto">
+            <Grid VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Image 
+                Grid.Row="0"
+                Width="200"
+                Source="\Assets\icon_256.png"
+              />
+                <ProgressBar
+                Grid.Row="1"
+                Width="200" 
+                Height="20" 
+                IsIndeterminate="True" />
+            </Grid>
         </Grid>
     </Grid>
 </Window>
