@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace tft_cosmetics_manager.Models
 {
-    public class GridItem : INotifyPropertyChanged
+    public class MainWindowGridItem : INotifyPropertyChanged
     {
         private string id;
         public string Id

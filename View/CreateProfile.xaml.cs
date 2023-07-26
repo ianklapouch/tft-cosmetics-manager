@@ -74,6 +74,7 @@ namespace tft_cosmetics_manager
 
                 var args = new SelectedDataEventArgs()
                 {
+                    ProfileId = context.ProfileId,
                     Name = name,
                     Companion = companion,
                     MapSkin = mapSkin,

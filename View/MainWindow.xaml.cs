@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using tft_cosmetics_manager.Models;
 using tft_cosmetics_manager.Services;
 using tft_cosmetics_manager.View;
+using tft_cosmetics_manager.ViewModels;
 
 namespace tft_cosmetics_manager
 {
@@ -19,7 +20,7 @@ namespace tft_cosmetics_manager
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<GridItem> itemList = new ObservableCollection<GridItem>();
+        private ObservableCollection<MainWindowGridItem> itemList = new ObservableCollection<MainWindowGridItem>();
 
         private bool IsDarkThemeEnabled { get; set; } = false;
 
@@ -77,7 +78,7 @@ namespace tft_cosmetics_manager
         {
 
             var listViewItem = (ListViewItem)sender;
-            var selectedItem = (GridItem)listViewItem.DataContext;
+            var selectedItem = (MainWindowGridItem)listViewItem.DataContext;
 
             if (selectedItem != null)
             {
@@ -87,19 +88,37 @@ namespace tft_cosmetics_manager
             }
         }
 
-        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+
+        void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            Button clickedButton = (Button)sender;
+            MainWindowGridItem selectedItem = (MainWindowGridItem)clickedButton.DataContext;
+
+            CreateProfileViewModel createProfileViewModel = new(selectedItem);
+
+            CreateProfile createProfile = new()
+            {
+                Owner = this,
+                DataContext = createProfileViewModel
+            };
+            createProfile.DataSent += CreateProfile_DataSent;
+            createProfile.Closed += CreateProfile_Closed;
+            createProfile.ShowDialog();
+        }
+
+        void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBox.Show("Are you sure you want to delete this profile? this action cannot be undone!", "Warning!", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
 
             if (result == MessageBoxResult.OK)
             {
                 Button clickedButton = (Button)sender;
-                GridItem selectedItem = (GridItem)clickedButton.DataContext;
+                MainWindowGridItem selectedItem = (MainWindowGridItem)clickedButton.DataContext;
                 string selectedId = selectedItem.Id;
 
                 ProfileService.RemoveProfile(selectedItem.Id);
 
-                GridItem itemToRemove = itemList.FirstOrDefault(item => item.Id == selectedId);
+                MainWindowGridItem itemToRemove = itemList.FirstOrDefault(item => item.Id == selectedId);
 
                 if (itemToRemove != null)
                 {
@@ -112,34 +131,78 @@ namespace tft_cosmetics_manager
 
         private void CreateProfile_DataSent(object sender, SelectedDataEventArgs e)
         {
-            string id = itemList.Count + 1.ToString();
-
             BitmapImage companionBitMapImage = ImageService.CreateBitmapImageFromUrl(e.Companion.ImageUrl);
             BitmapImage mapSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(e.MapSkin.ImageUrl);
             BitmapImage damageSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(e.DamageSkin.ImageUrl);
 
-            itemList.Add(new GridItem
+            if (string.IsNullOrEmpty(e.ProfileId))
             {
-                Id = id,
-                Text = e.Name,
-                CompanionId = e.Companion.ItemId.ToString(),
-                CompanionImage = companionBitMapImage,
-                MapSkinId = e.MapSkin.ItemId.ToString(),
-                MapSkinImage = mapSkinBitMapImage,
-                DamageSkinId = e.DamageSkin.ItemId.ToString(),
-                DamageSkinImage = damageSkinBitMapImage
-            });
+                string id = itemList.Count + 1.ToString();
 
-            Profile profile = new()
+                itemList.Add(new MainWindowGridItem
+                {
+                    Id = id,
+                    Text = e.Name,
+                    CompanionId = e.Companion.ItemId.ToString(),
+                    CompanionImage = companionBitMapImage,
+                    MapSkinId = e.MapSkin.ItemId.ToString(),
+                    MapSkinImage = mapSkinBitMapImage,
+                    DamageSkinId = e.DamageSkin.ItemId.ToString(),
+                    DamageSkinImage = damageSkinBitMapImage
+                });
+
+                Profile profile = new()
+                {
+                    Id = id,
+                    Title = e.Name,
+                    CompanionId = e.Companion.ItemId.ToString(),
+                    MapSkinId = e.MapSkin.ItemId.ToString(),
+                    DamageSkinId = e.DamageSkin.ItemId.ToString()
+                };
+
+                ProfileService.AddProfile(profile);
+            }
+            else
             {
-                Id = id,
-                Title = e.Name,
-                CompanionId = e.Companion.ItemId.ToString(),
-                MapSkinId = e.MapSkin.ItemId.ToString(),
-                DamageSkinId = e.DamageSkin.ItemId.ToString()
-            };
 
-            ProfileService.AddProfile(profile);
+                MainWindowGridItem newItem = new()
+                {
+                    Id = e.ProfileId,
+                    Text = e.Name,
+                    CompanionId = e.Companion.ItemId.ToString(),
+                    CompanionImage = companionBitMapImage,
+                    MapSkinId = e.MapSkin.ItemId.ToString(),
+                    MapSkinImage = mapSkinBitMapImage,
+                    DamageSkinId = e.DamageSkin.ItemId.ToString(),
+                    DamageSkinImage = damageSkinBitMapImage
+                };
+
+                List<MainWindowGridItem> newItemList = new(itemList);
+
+                itemList.Clear();
+                foreach(var item in newItemList)
+                {
+                    if (item.Id != e.ProfileId)
+                    {
+                        itemList.Add(item);
+                    } else
+                    {
+                        itemList.Add(newItem);
+                    }
+                }
+
+
+                Profile profile = new()
+                {
+                    Id = e.ProfileId,
+                    Title = e.Name,
+                    CompanionId = e.Companion.ItemId.ToString(),
+                    MapSkinId = e.MapSkin.ItemId.ToString(),
+                    DamageSkinId = e.DamageSkin.ItemId.ToString()
+                };
+
+                ProfileService.ReplaceProfile(profile);
+            }
         }
 
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
@@ -147,7 +210,8 @@ namespace tft_cosmetics_manager
             this.IsEnabled = false;
             CreateProfile createProfile = new()
             {
-                Owner = this
+                Owner = this,
+                DataContext = new CreateProfileViewModel()
             };
             createProfile.DataSent += CreateProfile_DataSent;
             createProfile.Closed += CreateProfile_Closed;
@@ -182,7 +246,7 @@ namespace tft_cosmetics_manager
                         BitmapImage damageSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(damageSkin.ImageUrl);
 
 
-                        itemList.Add(new GridItem
+                        itemList.Add(new MainWindowGridItem
                         {
                             Id = profile.Id,
                             Text = profile.Title,

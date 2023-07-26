@@ -60,12 +60,22 @@ namespace tft_cosmetics_manager.Services
             profiles.Add(profile);
             SaveProfiles(profiles);
         }
-
         public static void RemoveProfile(string id)
         {
             List<Profile> profiles = LoadProfiles();
             Profile profile = profiles.Find(p => p.Id == id);
             profiles.Remove(profile);
+            SaveProfiles(profiles);
+        }
+        public static void ReplaceProfile(Profile profile)
+        {
+            List<Profile> profiles = LoadProfiles();
+
+            int index = profiles.FindIndex(p => p.Id == profile.Id);
+            if (index != -1)
+            {
+                profiles[index] = profile;
+            }
             SaveProfiles(profiles);
         }
     }

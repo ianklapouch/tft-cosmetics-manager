@@ -9,6 +9,7 @@ namespace tft_cosmetics_manager.View
 {
     public class SelectedDataEventArgs : EventArgs
     {
+        public string ProfileId { get; set; }
         public string Name { get; set; }
         public Companion Companion { get; set; }
         public MapSkin MapSkin { get; set; }

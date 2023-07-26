@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Icon="\Assets\icon_256.png"
         Background="{DynamicResource MaterialDesignDarkBackground}"
-        Title="TFT Cosmetics Manager" Height="800" Width="965">
+        Title="TFT Cosmetics Manager" Height="740" Width="965">
 
 
 
@@ -65,13 +65,13 @@
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="200"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="4*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Text}"  VerticalAlignment="Center" Margin="5"/>
+                            <TextBlock Text="{Binding Text}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="5"/>
 
                             <TextBlock Text="{Binding Id}" Visibility="Hidden"/>
                             <TextBlock Text="{Binding CompanionId}" Visibility="Hidden"/>
@@ -90,16 +90,19 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Button
-                                    Visibility="Hidden"
+                                    Visibility="Visible"
                                     Grid.Column="0"
                                     HorizontalAlignment="Right"
                                     Margin="0 0 25 0"
-                                    IsEnabled="False"
                                     Background="#9E9E9E"
                                     Foreground="Black"
                                     BorderBrush="Transparent"
-                                    Width="Auto">
-                                    <materialDesign:PackIcon Kind="Cog"/>
+                                    Width="Auto"
+                                    Name="btnEdit"
+                                    Click="BtnEdit_Click"
+                                    >
+
+                                    <materialDesign:PackIcon Kind="Edit"/>
                                 </Button>
 
                                 <Button
@@ -123,18 +126,19 @@
                 <!--<ListViewItem HorizontalContentAlignment="Stretch">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="200"/>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="4*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="Teste" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"  />
 
-                        <Image Grid.Column="1" Source="C:\Users\iankl\Pictures\1.jpg" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
-                        <Image Grid.Column="2" Source="C:\Users\iankl\Pictures\1.jpg" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
-                        <Image Grid.Column="3" Source="C:\Users\iankl\Pictures\1.jpg" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
+                        <TextBlock TextWrapping="Wrap" Text="asdaAAAAAAAAAAAAAAAAAAAAAAAAAAAAsd" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"></TextBlock>
+
+                        <Image Grid.Column="1" Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
+                        <Image Grid.Column="2" Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
+                        <Image Grid.Column="3" Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
 
                         <Grid Grid.Column="4" HorizontalAlignment="Right">
 
@@ -144,7 +148,6 @@
                             </Grid.ColumnDefinitions>
 
                             <Button 
-                                Visibility="Collapsed"
                                 Grid.Column="0" 
                                     HorizontalAlignment="Right" 
                                     Margin="0 0 25 0"
@@ -153,7 +156,7 @@
                                     Background="#9E9E9E"
                                     Foreground="#000000"
                                     >
-                                <materialDesign:PackIcon Kind="Cog" />
+                                <materialDesign:PackIcon Kind="Edit" />
                             </Button>
 
 
@@ -165,7 +168,7 @@
                                 Foreground="#000000"
                                 BorderBrush="#000000"
                                 Width="Auto">
-                                <materialDesign:PackIcon Kind="Delete"/>
+                                <materialDesign:PackIcon Kind="Delete" />
                             </Button>
                         </Grid>
                     </Grid>

@@ -9,10 +9,10 @@
         WindowStyle="None"
         Background="{DynamicResource MaterialDesignDarkBackground}"
          xmlns:VM="clr-namespace:tft_cosmetics_manager.ViewModels"
-        Title="Create Profile" Height="800" Width="965">
-    <Window.DataContext>
+        Title="Create Profile" Height="740" Width="965">
+    <!--<Window.DataContext>
         <VM:CreateProfileViewModel />
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Window.Resources>
 
@@ -63,6 +63,7 @@
         <TabControl Grid.Row="1">
             <TabItem Header="Companions">
                 <Grid>
+
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"/>
                         <RowDefinition Height="*"/>
@@ -88,7 +89,7 @@
                             Content="Name" 
                             Margin="20 0 0 0"
                             Command="{Binding SortCompanionsNameCommand}" />
-                        
+
                         <Button 
                             Grid.Column="2" 
                             Content="Rarity" 
@@ -98,10 +99,25 @@
 
                     <ListBox 
                         Grid.Row="1"
+                        Margin="20 20 20 20"
                         ItemsSource="{Binding Companions}"
                         SelectedItem="{Binding SelectedCompanion}"
                         SelectionMode="Single"
                      >
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True">
+                                        <Setter Property="BorderBrush" Value="Red" />
+                                        <Setter Property="BorderThickness" Value="2" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+
+
+
+
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" />
@@ -265,6 +281,7 @@
 
                     <ListBox 
                         Grid.Row="1"
+                        Margin="20 20 20 20"
                         ItemsSource="{Binding MapSkins}"
                         SelectedItem="{Binding SelectedMapSkin}"
                         SelectionMode="Single"
@@ -362,6 +379,7 @@
 
                     <ListBox 
                         Grid.Row="1"
+                        Margin="20 20 20 20"
                         ItemsSource="{Binding DamageSkins}"
                         SelectedItem="{Binding SelectedDamageSkin}"
                         SelectionMode="Single"
