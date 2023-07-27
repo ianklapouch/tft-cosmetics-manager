@@ -1,101 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows.Media.Imaging;
 
 namespace tft_cosmetics_manager.Models
 {
     public class MainWindowGridItem : INotifyPropertyChanged
     {
-        private string id;
-        public string Id
-        {
-            get { return id; }
-            set
-            {
-                id= value;
-                OnPropertyChanged("Id");
-            }
-        }
-
-        private string text;
-        public string Text
-        {
-            get { return text; }
-            set
-            {
-                text = value;
-                OnPropertyChanged("Text");
-            }
-        }
-        private string companionId;
-        public string CompanionId
-        {
-            get { return companionId; }
-            set
-            {
-                companionId = value;
-                OnPropertyChanged("CompanionId");
-            }
-        }
-        private BitmapImage companionImage;
-        public BitmapImage CompanionImage
-        {
-            get { return companionImage; }
-            set
-            {
-                companionImage = value;
-                OnPropertyChanged("CompanionImage");
-            }
-        }
-        private string mapSkinId;
-        public string MapSkinId
-        {
-            get { return mapSkinId; }
-            set
-            {
-                mapSkinId = value;
-                OnPropertyChanged("MapSkinId");
-            }
-        }
-        private BitmapImage mapSkinImage;
-        public BitmapImage MapSkinImage
-        {
-            get { return mapSkinImage; }
-            set
-            {
-                mapSkinImage = value;
-                OnPropertyChanged("MapSkinImage");
-            }
-        }
-        private string damageSkinId;
-        public string DamageSkinId
-        {
-            get { return damageSkinId; }
-            set
-            {
-                damageSkinId = value;
-                OnPropertyChanged("DamageSkinId");
-            }
-        }
-        private BitmapImage damageSkinImage;
-        public BitmapImage DamageSkinImage
-        {
-            get { return damageSkinImage; }
-            set
-            {
-                damageSkinImage = value;
-                OnPropertyChanged("DamageSkinImage");
-            }
-        }
-
-
-
+        public string Id { get; set; }
+        public string Text { get; set; }
+        public string CompanionId { get; set; }
+        public string CompanionName { get; set; }
+        public BitmapImage CompanionImage { get; set; }
+        public BitmapImage CompanionPlatingImage { get; set; }
+        public string MapSkinId { get; set; }
+        public string MapSkinName { get; set; }
+        public BitmapImage MapSkinImage { get; set; }
+        public BitmapImage MapSkinPlatingImage { get; set; }
+        public string DamageSkinId { get; set; }
+        public string DamageSkinName { get; set; }
+        public BitmapImage DamageSkinImage { get; set; }
+        public BitmapImage DamageSkinPlatingImage { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

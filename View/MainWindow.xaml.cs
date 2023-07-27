@@ -116,7 +116,7 @@ namespace tft_cosmetics_manager
                 MainWindowGridItem selectedItem = (MainWindowGridItem)clickedButton.DataContext;
                 string selectedId = selectedItem.Id;
 
-                ProfileService.RemoveProfile(selectedItem.Id);
+                FileManager.RemoveProfile(selectedItem.Id);
 
                 MainWindowGridItem itemToRemove = itemList.FirstOrDefault(item => item.Id == selectedId);
 
@@ -135,6 +135,10 @@ namespace tft_cosmetics_manager
             BitmapImage mapSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(e.MapSkin.ImageUrl);
             BitmapImage damageSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(e.DamageSkin.ImageUrl);
 
+            BitmapImage companionPlating = ImageService.CreateBitmapImageFromRelativeUrl($"/Assets/Plating/{e.Companion.Rarity}.png");
+            BitmapImage mapSkinPlating = ImageService.CreateBitmapImageFromRelativeUrl($"/Assets/Plating/{e.MapSkin.Rarity}.png");
+            BitmapImage damageSkinPlating = ImageService.CreateBitmapImageFromRelativeUrl($"/Assets/Plating/{e.DamageSkin.Rarity}.png");
+
             if (string.IsNullOrEmpty(e.ProfileId))
             {
                 string id = itemList.Count + 1.ToString();
@@ -144,11 +148,17 @@ namespace tft_cosmetics_manager
                     Id = id,
                     Text = e.Name,
                     CompanionId = e.Companion.ItemId.ToString(),
+                    CompanionName = e.Companion.Name,
                     CompanionImage = companionBitMapImage,
+                    CompanionPlatingImage = companionPlating,
                     MapSkinId = e.MapSkin.ItemId.ToString(),
+                    MapSkinName = e.MapSkin.Name,
                     MapSkinImage = mapSkinBitMapImage,
+                    MapSkinPlatingImage = mapSkinPlating,
                     DamageSkinId = e.DamageSkin.ItemId.ToString(),
-                    DamageSkinImage = damageSkinBitMapImage
+                    DamageSkinName = e.DamageSkin.Name,
+                    DamageSkinImage = damageSkinBitMapImage,
+                    DamageSkinPlatingImage = damageSkinPlating,
                 });
 
                 Profile profile = new()
@@ -160,7 +170,7 @@ namespace tft_cosmetics_manager
                     DamageSkinId = e.DamageSkin.ItemId.ToString()
                 };
 
-                ProfileService.AddProfile(profile);
+                FileManager.AddProfile(profile);
             }
             else
             {
@@ -170,22 +180,29 @@ namespace tft_cosmetics_manager
                     Id = e.ProfileId,
                     Text = e.Name,
                     CompanionId = e.Companion.ItemId.ToString(),
+                    CompanionName = e.Companion.Name,
                     CompanionImage = companionBitMapImage,
+                    CompanionPlatingImage = companionPlating,
                     MapSkinId = e.MapSkin.ItemId.ToString(),
+                    MapSkinName = e.MapSkin.Name,
                     MapSkinImage = mapSkinBitMapImage,
+                    MapSkinPlatingImage = mapSkinPlating,
                     DamageSkinId = e.DamageSkin.ItemId.ToString(),
-                    DamageSkinImage = damageSkinBitMapImage
+                    DamageSkinName = e.DamageSkin.Name,
+                    DamageSkinImage = damageSkinBitMapImage,
+                    DamageSkinPlatingImage = damageSkinPlating,
                 };
 
                 List<MainWindowGridItem> newItemList = new(itemList);
 
                 itemList.Clear();
-                foreach(var item in newItemList)
+                foreach (var item in newItemList)
                 {
                     if (item.Id != e.ProfileId)
                     {
                         itemList.Add(item);
-                    } else
+                    }
+                    else
                     {
                         itemList.Add(newItem);
                     }
@@ -201,7 +218,7 @@ namespace tft_cosmetics_manager
                     DamageSkinId = e.DamageSkin.ItemId.ToString()
                 };
 
-                ProfileService.ReplaceProfile(profile);
+                FileManager.ReplaceProfile(profile);
             }
         }
 
@@ -229,7 +246,7 @@ namespace tft_cosmetics_manager
 
             if (hasLoadedCompanions && hasLoadedMapSkins && hasLoadedDamageSkins)
             {
-                List<Profile> profiles = ProfileService.LoadProfiles();
+                List<Profile> profiles = FileManager.LoadProfiles();
 
                 if (profiles.Count > 0)
                 {
@@ -245,17 +262,29 @@ namespace tft_cosmetics_manager
                         BitmapImage mapSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(mapSkin.ImageUrl);
                         BitmapImage damageSkinBitMapImage = ImageService.CreateBitmapImageFromUrl(damageSkin.ImageUrl);
 
+                        BitmapImage companionPlating = ImageService.CreateBitmapImageFromRelativeUrl($"/Assets/Plating/{companion.Rarity}.png");
+                        BitmapImage mapSkinPlating = ImageService.CreateBitmapImageFromRelativeUrl($"/Assets/Plating/{mapSkin.Rarity}.png");
+                        BitmapImage damageSkinPlating = ImageService.CreateBitmapImageFromRelativeUrl($"/Assets/Plating/{damageSkin.Rarity}.png");
 
                         itemList.Add(new MainWindowGridItem
                         {
                             Id = profile.Id,
                             Text = profile.Title,
+
                             CompanionId = profile.CompanionId,
+                            CompanionName = companion.Name,
                             CompanionImage = companionBitMapImage,
+                            CompanionPlatingImage = companionPlating,
+
                             MapSkinId = profile.MapSkinId,
+                            MapSkinName = mapSkin.Name,
                             MapSkinImage = mapSkinBitMapImage,
+                            MapSkinPlatingImage = mapSkinPlating,
+
                             DamageSkinId = profile.DamageSkinId,
+                            DamageSkinName = damageSkin.Name,
                             DamageSkinImage = damageSkinBitMapImage,
+                            DamageSkinPlatingImage = damageSkinPlating,
                         });
                     }
                 }

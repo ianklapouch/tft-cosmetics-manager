@@ -11,9 +11,6 @@
         Title="TFT Cosmetics Manager" Height="740" Width="965">
 
 
-
-
-
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -78,9 +75,125 @@
                             <TextBlock Text="{Binding MapSkinId}" Visibility="Hidden"/>
                             <TextBlock Text="{Binding DamageSkinId}" Visibility="Hidden"/>
 
-                            <Image Source="{Binding CompanionImage}" Grid.Column="1" Stretch="Uniform" Width="100" Height="80" Margin="5"/>
-                            <Image Source="{Binding MapSkinImage}"  Grid.Column="2" Stretch="Uniform" Width="100" Height="80" Margin="5"/>
-                            <Image Source="{Binding DamageSkinImage}"  Grid.Column="3" Stretch="Uniform" Width="100" Height="80" Margin="5"/>
+                            <Grid 
+                                Grid.Column="1"
+                                Margin="5,5,5,5"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="110"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock 
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                TextWrapping="Wrap"
+                                Text="{Binding CompanionName}"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Center"/>
+
+                                <Canvas Grid.Row="1" Grid.Column="0">
+                                    <Image 
+                                    Width="100" 
+                                    Source="{Binding CompanionImage}"
+                                    Height="100"/>
+
+                                    <Image                       
+                                    Width="65"
+                                    Canvas.Top="68"
+                                    Source="{Binding CompanionPlatingImage}"
+                                    Canvas.Left="19"/>
+                                </Canvas>
+                            </Grid>
+
+                           
+
+                            <Grid 
+                                Grid.Column="2"
+                                Margin="5,5,5,5"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="110"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock 
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                TextWrapping="Wrap"
+                                Text="{Binding MapSkinName}"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Center"/>
+
+                                <Canvas Grid.Row="1" Grid.Column="0">
+                                    <Image 
+                                    Width="100" 
+                                    Source="{Binding MapSkinImage}"
+                                    Height="100"/>
+
+                                    <Image                       
+                                    Width="65"
+                                    Canvas.Top="85"
+                                    Source="{Binding MapSkinPlatingImage}"
+                                    Canvas.Left="19"/>
+                                </Canvas>
+                            </Grid>
+
+                            <Grid 
+                                Grid.Column="3"
+                                Margin="5,5,5,5"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="110"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock 
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                TextWrapping="Wrap"
+                                Text="{Binding DamageSkinName}"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Center"/>
+
+                                <Canvas Grid.Row="1" Grid.Column="0">
+                                    <Image 
+                                    Width="100" 
+                                    Source="{Binding DamageSkinImage}"
+                                    Height="100"/>
+
+                                    <Image                       
+                                    Width="65"
+                                    Canvas.Top="85"
+                                    Source="{Binding DamageSkinPlatingImage}"
+                                    Canvas.Left="19"/>
+                                </Canvas>
+                            </Grid>
+
+                            <!--<Image Source="{Binding CompanionImage}" Grid.Column="1" Stretch="Uniform" Width="100" Height="80" Margin="5"/>-->
+                            <!--<Image Source="{Binding MapSkinImage}"  Grid.Column="2" Stretch="Uniform" Width="100" Height="80" Margin="5"/>
+                            <Image Source="{Binding DamageSkinImage}"  Grid.Column="3" Stretch="Uniform" Width="100" Height="80" Margin="5"/>-->
 
                             <Grid Grid.Column="4" HorizontalAlignment="Right">
 
@@ -136,7 +249,45 @@
 
                         <TextBlock TextWrapping="Wrap" Text="asdaAAAAAAAAAAAAAAAAAAAAAAAAAAAAsd" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,0,5,0"></TextBlock>
 
-                        <Image Grid.Column="1" Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
+
+
+                        <Grid 
+                            Grid.Column="1"
+                            Margin="5,5,5,5"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition Height="110"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock 
+                                Grid.Column="0"
+                                Grid.Row="0"
+                                TextWrapping="Wrap"
+                                Text="NomeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
+                                HorizontalAlignment="Center"/>
+
+                            <Canvas Grid.Row="1" Grid.Column="0">
+                                <Image 
+                                    Width="100" 
+                                    Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png"
+                                    Height="100"/>
+
+                                <Image                       
+                                    Width="65"
+                                    Canvas.Top="68"
+                                    Source="\Assets\Plating\Default.png"
+                                    Canvas.Left="19"/>
+                            </Canvas>
+                        </Grid>
+
                         <Image Grid.Column="2" Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
                         <Image Grid.Column="3" Source="C:\Users\iankl\Pictures\tooltip_tft_avatar_blue.png" Stretch="Uniform"  Height="75" Margin="5,5,5,5"/>
 

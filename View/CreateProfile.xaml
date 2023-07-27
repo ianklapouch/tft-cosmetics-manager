@@ -129,7 +129,7 @@
                                 <Grid>
 
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="30"/>
                                         <RowDefinition Height="110"/>
                                     </Grid.RowDefinitions>
 
@@ -142,11 +142,12 @@
 
                                     <TextBlock Grid.Column="0"
                                         Grid.Row="0"
+                                               VerticalAlignment="Bottom"
                                                TextWrapping="Wrap"
                                          Text="{Binding Name}" 
                                         HorizontalAlignment="Center"/>
 
-                                    <Canvas Grid.Row="1" Grid.Column="0">
+                                    <Canvas Grid.Row="1" Grid.Column="1">
 
                                         <Image 
                                         Width="100" 
@@ -167,10 +168,9 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                </Grid>
-                <!--<Grid>
-                    <ListBox 
+                    <!--<ListBox 
                         SelectionMode="Single"
+                         Grid.Row="1"
                      >
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -207,7 +207,7 @@
                         <ListBoxItem>
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="30"/>
                                     <RowDefinition Height="110"/>
                                 </Grid.RowDefinitions>
 
@@ -217,7 +217,8 @@
 
                                 <TextBlock Grid.Column="0"
                                         Grid.Row="0"
-                                        Text="Nome" 
+                                           TextWrapping="Wrap"
+                                        Text="NomeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" 
                                         HorizontalAlignment="Center"/>
 
                                 <Canvas Grid.Row="1" Grid.Column="0">
@@ -239,8 +240,8 @@
 
                             </Grid>
                         </ListBoxItem>
-                    </ListBox>
-                </Grid>-->
+                    </ListBox>-->
+                </Grid>
 
             </TabItem>
 
@@ -286,6 +287,18 @@
                         SelectedItem="{Binding SelectedMapSkin}"
                         SelectionMode="Single"
                      >
+
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True">
+                                        <Setter Property="BorderBrush" Value="Red" />
+                                        <Setter Property="BorderThickness" Value="2" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" />
@@ -297,7 +310,7 @@
                                 <Grid>
 
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="30"/>
                                         <RowDefinition Height="110"/>
                                     </Grid.RowDefinitions>
 
@@ -314,6 +327,7 @@
                                         Grid.Row="0"
                                         TextWrapping="Wrap"
                                         Text="{Binding Name}" 
+                                         VerticalAlignment="Bottom"
                                         HorizontalAlignment="Center"/>
 
                                     <Canvas 
@@ -384,6 +398,18 @@
                         SelectedItem="{Binding SelectedDamageSkin}"
                         SelectionMode="Single"
                      >
+
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="True">
+                                        <Setter Property="BorderBrush" Value="Red" />
+                                        <Setter Property="BorderThickness" Value="2" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" />
@@ -395,7 +421,7 @@
                                 <Grid>
 
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="30"/>
                                         <RowDefinition Height="110"/>
                                     </Grid.RowDefinitions>
 
@@ -412,6 +438,7 @@
                                         Grid.Row="0"
                                         Text="{Binding Name}" 
                                         TextWrapping="Wrap"
+                                        VerticalAlignment="Bottom"
                                         HorizontalAlignment="Center"/>
 
                                     <Canvas 
