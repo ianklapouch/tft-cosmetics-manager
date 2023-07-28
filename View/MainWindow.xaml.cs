@@ -303,7 +303,7 @@ namespace tft_cosmetics_manager
             {
                 button.IsEnabled = false;
                 button.Cursor = Cursors.No;
-                button.Content = "Loading...";
+                button.Content = "LOADING...";
             }
 
 
@@ -320,6 +320,17 @@ namespace tft_cosmetics_manager
                 button.Cursor = Cursors.Hand;
                 button.Content = "Randomize!";
             }
+        }
+        private void BtnFavorites_Click(object sender, RoutedEventArgs e)
+        {
+            this.IsEnabled = false;
+            Favorites favorites = new()
+            {
+                Owner = this,
+                DataContext = new FavoritesViewModel()
+            };
+            favorites.Closed += CreateProfile_Closed;
+            favorites.ShowDialog();
         }
         private void ShowOverlay()
         {

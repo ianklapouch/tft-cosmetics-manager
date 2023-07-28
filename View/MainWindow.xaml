@@ -335,6 +335,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
 
@@ -355,6 +356,15 @@
                 Margin="20"
                 Style="{DynamicResource MaterialDesignRaisedAccentButton}"
                 Click="RandomizeButton_Click"/>
+
+                <Button
+                Grid.Column="3"
+                Content="FAVORITES"
+                Margin="25, 0, 0, 0"
+                Name="btnFavorites"
+                Width="auto"
+                Style="{DynamicResource MaterialDesignRaisedDarkButton}"
+                Click="BtnFavorites_Click"/>
             </Grid>
 
         </Grid>
