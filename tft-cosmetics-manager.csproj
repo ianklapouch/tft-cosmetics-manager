@@ -7,19 +7,27 @@
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<PackageIcon>icon_256.ico</PackageIcon>
+		<Version>1.0.0</Version>
+		<Title>TFTCosmeticsManager</Title>
+		<Authors>Ian Gabriel Klapouch</Authors>
+		<RepositoryUrl>https://github.com/ianklapouch/tft-cosmetics-manager</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<ApplicationIcon>Assets\icon_256.ico</ApplicationIcon>
+		<AssemblyName>TFTCosmeticsManager</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Remove="Assets\icon_128.png" />
-		<None Remove="Assets\icon_256.png" />
 		<None Remove="Assets\icon_379.png" />
 		<None Remove="Assets\Plating\Default.png" />
 		<None Remove="Assets\Plating\Epic.png" />
 		<None Remove="Assets\Plating\Legendary.png" />
 		<None Remove="Assets\Plating\Mythic.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Assets\icon_256.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -41,6 +49,17 @@
 		<Resource Include="Assets\Plating\Epic.png" />
 		<Resource Include="Assets\Plating\Legendary.png" />
 		<Resource Include="Assets\Plating\Mythic.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Assets\icon_256.ico">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Update="Assets\icon_256.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

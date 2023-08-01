@@ -23,7 +23,9 @@ namespace tft_cosmetics_manager.ViewModels
 {
     public class FavoritesViewModel : INotifyPropertyChanged
     {
-
+        public ObservableCollection<CreateProfileGridItem> Companions { get; set; } = new();
+        public ObservableCollection<CreateProfileGridItem> MapSkins { get; set; } = new();
+        public ObservableCollection<CreateProfileGridItem> DamageSkins { get; set; } = new();
         public List<int> selectedCompanionIds;
         public List<int> SelectedCompanionIds
         {
@@ -34,48 +36,24 @@ namespace tft_cosmetics_manager.ViewModels
                 OnPropertyChanged(nameof(SelectedCompanionIds));
             }
         }
-        public ObservableCollection<CreateProfileGridItem> Companions { get; set; } = new();
-        public ObservableCollection<CreateProfileGridItem> MapSkins { get; set; } = new();
-        public ObservableCollection<CreateProfileGridItem> DamageSkins { get; set; } = new();
-        private string name;
-        public string Name
+        public List<int> selectedMapSkinIds;
+        public List<int> SelectedMapSkinIds
         {
-            get { return name; }
+            get { return selectedMapSkinIds; }
             set
             {
-                name = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(name)));
+                selectedMapSkinIds = value;
+                OnPropertyChanged(nameof(SelectedCompanionIds));
             }
         }
-        private CreateProfileGridItem selectedCompanion;
-        public CreateProfileGridItem SelectedCompanion
+        public List<int> selectedDamageSkinIds;
+        public List<int> SelectedDamageSkinIds
         {
-            get => selectedCompanion;
+            get { return selectedDamageSkinIds; }
             set
             {
-                selectedCompanion = value;
-                OnPropertyChanged(nameof(SelectedCompanion));
-            }
-        }
-        private CreateProfileGridItem selectedMapSkin;
-        public CreateProfileGridItem SelectedMapSkin
-        {
-            get => selectedMapSkin;
-            set
-            {
-                selectedMapSkin = value;
-                OnPropertyChanged(nameof(SelectedMapSkin));
-            }
-        }
-
-        private CreateProfileGridItem selectedDamageSkin;
-        public CreateProfileGridItem SelectedDamageSkin
-        {
-            get => selectedDamageSkin;
-            set
-            {
-                selectedDamageSkin = value;
-                OnPropertyChanged(nameof(SelectedDamageSkin));
+                selectedDamageSkinIds = value;
+                OnPropertyChanged(nameof(SelectedCompanionIds));
             }
         }
         public ICommand SortCompanionsNameCommand { get; private set; }
@@ -85,27 +63,11 @@ namespace tft_cosmetics_manager.ViewModels
         public ICommand SortDamageSkinsNameCommand { get; private set; }
         public ICommand SortDamageSkinsRarityCommand { get; private set; }
 
-        public string ProfileId { get; set; }
-        public void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SelectedCompanionIds.Clear();
-            foreach (Companion companion in e.AddedItems)
-            {
-                SelectedCompanionIds.Add(companion.ItemId);
-            }
-        }
         public FavoritesViewModel()
         {
-            name = "New Profile";
             LoadImages();
 
             Favorite favorite = FileManager.GetFavorite();
-
-            if (favorite.Companions.Count > 0)
-            {
-
-            }
-
 
             SortCompanionsNameCommand = new RelayCommand(SortCompanionsByName);
             SortCompanionsRarityCommand = new RelayCommand(SortCompanionsByRarity);
@@ -113,9 +75,12 @@ namespace tft_cosmetics_manager.ViewModels
             SortMapSkinsRarityCommand = new RelayCommand(SortMapSkinsByRarity);
             SortDamageSkinsNameCommand = new RelayCommand(SortDamageSkinsByName);
             SortDamageSkinsRarityCommand = new RelayCommand(SortDamageSkinsByRarity);
-            SelectedCompanionIds = new List<int>();
 
+            SelectedCompanionIds = new List<int>();
+            SelectedMapSkinIds = new List<int>();
+            SelectedDamageSkinIds = new List<int>();
         }
+
 
         private void LoadImages()
         {
@@ -214,7 +179,6 @@ namespace tft_cosmetics_manager.ViewModels
                 DamageSkins.Add(item);
             }
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {

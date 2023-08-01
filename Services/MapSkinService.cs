@@ -88,15 +88,37 @@ namespace tft_cosmetics_manager.Services
 
             return true;
         }
+        static string GetRandom()
+        {
+            Favorite favorite = FileManager.GetFavorite();
+            List<MapSkin> selectedMapSkins = new();
 
+            if (favorite.Type == 0 && favorite.MapSkins.Count > 0)
+            {
+                selectedMapSkins = MapSkins.Where(e => favorite.MapSkins.Contains(e.ItemId.ToString())).ToList();
+            }
+            else if (favorite.Type == 1 && favorite.Companions.Count < MapSkins.Count)
+            {
+                selectedMapSkins = MapSkins.Where(e => !favorite.MapSkins.Contains(e.ItemId.ToString())).ToList();
+            }
+
+            if (selectedMapSkins.Count > 0)
+            {
+                Random random = new();
+                int randomIndex = random.Next(0, selectedMapSkins.Count);
+                return selectedMapSkins[randomIndex].ItemId.ToString();
+            }
+
+            Random fallbackRandom = new();
+            int fallbackRandomIndex = fallbackRandom.Next(0, MapSkins.Count);
+            return MapSkins[fallbackRandomIndex].ItemId.ToString();
+        }
         public static async Task<bool> SetMapSkin(string id = "")
         {
             string selectedId;
             if (string.IsNullOrEmpty(id))
             {
-                Random random = new();
-                int randomIndex = random.Next(0, MapSkins.Count);
-                selectedId = MapSkins[randomIndex].ItemId.ToString();
+                selectedId = GetRandom();
             }
             else
             {

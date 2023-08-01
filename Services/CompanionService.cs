@@ -89,14 +89,38 @@ namespace tft_cosmetics_manager.Services
 
             return true;
         }
+        static string GetRandom()
+        {
+            Favorite favorite = FileManager.GetFavorite();
+            List<Companion> selectedCompanions = new();
+
+            if (favorite.Type == 0 && favorite.Companions.Count > 0)
+            {
+                selectedCompanions = Companions.Where(e => favorite.Companions.Contains(e.ItemId.ToString())).ToList();
+            }
+            else if (favorite.Type == 1 && favorite.Companions.Count < Companions.Count)
+            {
+                selectedCompanions = Companions.Where(e => !favorite.Companions.Contains(e.ItemId.ToString())).ToList();
+            }
+
+            if (selectedCompanions.Count > 0)
+            {
+                Random random = new();
+                int randomIndex = random.Next(0, selectedCompanions.Count);
+                return selectedCompanions[randomIndex].ItemId.ToString();
+            }
+
+            Random fallbackRandom = new();
+            int fallbackRandomIndex = fallbackRandom.Next(0, Companions.Count);
+            return Companions[fallbackRandomIndex].ItemId.ToString();
+        }
+
         public static async Task<bool> SetCompanion(string id = "")
         {
             string selectedId;
             if (string.IsNullOrEmpty(id))
             {
-                Random random = new();
-                int randomIndex = random.Next(0, Companions.Count);
-                selectedId = Companions[randomIndex].ItemId.ToString();
+                selectedId = GetRandom();
             }
             else
             {

@@ -57,20 +57,43 @@ namespace tft_cosmetics_manager
 
         private void Favorites_Loaded(object sender, RoutedEventArgs e)
         {
-            if (companionsListBox.ItemsSource is ObservableCollection<CreateProfileGridItem> companions && companions.Any())
+            if (
+                (companionsListBox.ItemsSource is ObservableCollection<CreateProfileGridItem> companions && companions.Any()) &&
+                (mapSkinsListBox.ItemsSource is ObservableCollection<CreateProfileGridItem> mapSkins && mapSkins.Any()) &&
+                (damageSkinsListBox.ItemsSource is ObservableCollection<CreateProfileGridItem> damageSkins && damageSkins.Any())
+                )
             {
-                CreateProfileGridItem companion = companions.FirstOrDefault();
+
+                Favorite favorite = FileManager.GetFavorite();
+
+                if (favorite.Type == 0)
+                    radioButtonWhiteList.IsChecked = true;
+
+                if (favorite.Type == 1)
+                    radioButtonBlackList.IsChecked = true;
 
 
-                companionsListBox.SelectedItems.Add(companion);
 
-                //if (DataContext is FavoritesViewModel context)
-                //{
-                //    context.SelectedCompanionIds.Add(companion.ItemId);
-                //}
+                List<CreateProfileGridItem> selectedCompanions = companions.Where(e => favorite.Companions.Contains(e.ItemId.ToString())).ToList();
+                foreach (var item in selectedCompanions)
+                {
+                    companionsListBox.SelectedItems.Add(item);
+                }
+
+                List<CreateProfileGridItem> selectedMapSkins = mapSkins.Where(e => favorite.MapSkins.Contains(e.ItemId.ToString())).ToList();
+                foreach (var item in selectedMapSkins)
+                {
+                    mapSkinsListBox.SelectedItems.Add(item);
+                }
+
+                List<CreateProfileGridItem> selectedDamageSkins = damageSkins.Where(e => favorite.DamageSkins.Contains(e.ItemId.ToString())).ToList();
+                foreach (var item in selectedDamageSkins)
+                {
+                    damageSkinsListBox.SelectedItems.Add(item);
+                }
             }
         }
-        public void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void CompanionsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (DataContext is FavoritesViewModel context)
             {
@@ -90,11 +113,70 @@ namespace tft_cosmetics_manager
                 }
             }
         }
+        public void MapSkinListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is FavoritesViewModel context)
+            {
+                if (e.AddedItems.Count > 0)
+                {
+                    foreach (CreateProfileGridItem mapSkin in e.AddedItems)
+                    {
+                        context.SelectedMapSkinIds.Add(mapSkin.ItemId);
+                    }
+                }
+                if (e.RemovedItems.Count > 0)
+                {
+                    foreach (CreateProfileGridItem mapSkin in e.RemovedItems)
+                    {
+                        context.SelectedMapSkinIds.Remove(mapSkin.ItemId);
+                    }
+                }
+            }
+        }
+        public void DamageSkinsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is FavoritesViewModel context)
+            {
+                if (e.AddedItems.Count > 0)
+                {
+                    foreach (CreateProfileGridItem damageSkin in e.AddedItems)
+                    {
+                        context.SelectedDamageSkinIds.Add(damageSkin.ItemId);
+                    }
+                }
+                if (e.RemovedItems.Count > 0)
+                {
+                    foreach (CreateProfileGridItem damageSkin in e.RemovedItems)
+                    {
+                        context.SelectedDamageSkinIds.Remove(damageSkin.ItemId);
+                    }
+                }
+            }
+        }
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             FavoritesViewModel? context = DataContext as FavoritesViewModel;
+            if (context != null)
+            {
+                bool isWhiteListChecked = (bool)radioButtonWhiteList.IsChecked;
 
-            Console.WriteLine("é o debugas");
+                List<string> companions = context.selectedCompanionIds.Select(i => i.ToString()).ToList();
+                List<string> mapSkins = context.selectedMapSkinIds.Select(i => i.ToString()).ToList();
+                List<string> damageSkins = context.selectedDamageSkinIds.Select(i => i.ToString()).ToList();
+
+                Favorite favorite = new()
+                {
+                    Type = isWhiteListChecked ? 0 : 1,
+                    Companions = companions,
+                    MapSkins = mapSkins,
+                    DamageSkins = damageSkins
+                };
+
+                FileManager.SetFavorite(favorite);
+            }
+            this.Close();
+
+
             //CreateProfileViewModel? context = DataContext as CreateProfileViewModel;
 
             //if (!string.IsNullOrEmpty(context.Name) && context.SelectedCompanion != null && context.SelectedMapSkin != null && context.SelectedDamageSkin != null)

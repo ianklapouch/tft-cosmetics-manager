@@ -9,7 +9,7 @@
         WindowStyle="None"
         Background="{DynamicResource MaterialDesignDarkBackground}"
          xmlns:VM="clr-namespace:tft_cosmetics_manager.ViewModels"
-        Title="Create Profile" Height="740" Width="965">
+        Title="Create Profile" Height="740" Width="970">
 
     <!--<Window.DataContext>
         <VM:FavoritesViewModel />
@@ -47,19 +47,47 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
-        <TextBox 
-            Name="txtCreateProfile"
-            Grid.Row="0"
-            Margin="10"
-            FontSize="20"
-            Text="{Binding Name}" 
-            VerticalAlignment="Center"
-            Foreground="White" />
+
+        <Grid Grid.Row="0" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="716*"/>
+                <ColumnDefinition Width="239*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label
+                Grid.Row="0"
+                FontSize="18" Grid.ColumnSpan="2"  
+            >
+                Configuration type</Label>
+            <RadioButton
+                GroupName="Type"
+                FontSize="16"  
+                Foreground="White"
+                Name="radioButtonWhiteList"
+                IsChecked="True" Grid.ColumnSpan="2" Margin="0,29,0,23" Grid.RowSpan="3"
+                >
+                White List (Random will be created based on marked items, if none are marked all are considered)
+            </RadioButton>
+            <RadioButton 
+                Grid.Row="2"
+                GroupName="Type"
+                FontSize="16"  
+                Foreground="White"
+                Name="radioButtonBlackList" Grid.ColumnSpan="2"
+                >
+                Black List (Random will be created based on unmarked items, if all are marked all will be considered)
+            </RadioButton>
+        </Grid>
 
         <TabControl Grid.Row="1">
             <TabItem Header="Companions">
@@ -104,7 +132,7 @@
                         x:Name="companionsListBox"
                         ItemsSource="{Binding Companions}"
                         SelectionMode="Multiple"
-                        SelectionChanged="ListBox_SelectionChanged"
+                        SelectionChanged="CompanionsListBox_SelectionChanged"
                      >
 
                         <ListBox.ItemContainerStyle>
@@ -285,10 +313,11 @@
 
                     <ListBox 
                         Grid.Row="1"
+                        x:Name="mapSkinsListBox"
                         Margin="20 20 20 20"
                         ItemsSource="{Binding MapSkins}"
-                        SelectedItem="{Binding SelectedMapSkin}"
-                        SelectionMode="Single"
+                        SelectionMode="Multiple"
+                        SelectionChanged="MapSkinListBox_SelectionChanged"
                      >
 
                         <ListBox.ItemContainerStyle>
@@ -397,9 +426,10 @@
                     <ListBox 
                         Grid.Row="1"
                         Margin="20 20 20 20"
+                        x:Name="damageSkinsListBox"
                         ItemsSource="{Binding DamageSkins}"
-                        SelectedItem="{Binding SelectedDamageSkin}"
-                        SelectionMode="Single"
+                        SelectionMode="Multiple"
+                        SelectionChanged="DamageSkinsListBox_SelectionChanged"
                      >
 
                         <ListBox.ItemContainerStyle>

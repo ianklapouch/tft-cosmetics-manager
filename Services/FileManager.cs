@@ -20,8 +20,13 @@ namespace tft_cosmetics_manager.Services
             if (!Directory.Exists(FOLDER_PATH))
             {
                 Directory.CreateDirectory(FOLDER_PATH);
+                
                 File.Create(PROFILES_PATH);
-                File.Create(FAVORITES_PATH);
+
+                string favoriteJson = JsonConvert.SerializeObject(new Favorite(), Formatting.Indented);
+                File.WriteAllText(FAVORITES_PATH, favoriteJson);
+                //File.Create(FAVORITES_PATH);
+
                 return new List<Profile>();
             }
             string json = File.ReadAllText(PROFILES_PATH);
@@ -71,12 +76,10 @@ namespace tft_cosmetics_manager.Services
             }
             SaveProfiles(profiles);
         }
-        public static void SetFavoriteType(int type)
+
+        public static void SetFavorite(Favorite favorite)
         {
-            string json = File.ReadAllText(FAVORITES_PATH);
-            Favorite favorite = JsonConvert.DeserializeObject<Favorite>(json);
-            favorite.Type = type;
-            json = JsonConvert.SerializeObject(favorite, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(favorite, Formatting.Indented);
             File.WriteAllText(FAVORITES_PATH, json);
         }
         public static Favorite GetFavorite()
