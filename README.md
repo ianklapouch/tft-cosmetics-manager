@@ -38,5 +38,8 @@ You can create favorites with two different rules: White List and Black List.
 
 By using these White List and Black List rules, you can have more control over the cosmetics that will be chosen during the randomization process.
 
+## Acknowledgments
+I would like to express my heartfelt appreciation to [@dontdoitadam](https://www.twitch.tv/dontdoitadam) for their contribution to the TFT Cosmetics Manager project. He created the amazing project logo that you can see at the top of this page. Their artistic skill and dedication helped bring the application's visual identity to life.
+
 ## Conclusion
 TFT Cosmetics Manager is an open-source project developed for educational purposes, as a portfolio project, and to contribute something useful to the community. If you find this project helpful and want to support it, you can show your appreciation by [buying me a coffee](https://www.buymeacoffee.com/ianklapouch), following my [GitHub](https://github.com/ianklapouch) profile, and giving this repository a star to increase its visibility.
