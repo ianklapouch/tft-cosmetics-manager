@@ -3,6 +3,12 @@
 	TFT Cosmetics Manager
 </h3>
 
+<h3 align="center">
+	
+[![Downloads](https://img.shields.io/github/downloads/ianklapouch/tft-cosmetics-manager/total.svg?maxAge=2592001)](https://github.com/ianklapouch/tft-cosmetics-manager/releases/)
+
+</h3>
+
 TFT Cosmetics Manager is a .NET application developed using WPF, which allows you to create and manage profiles based on your Teamfight Tactics cosmetics. You can quickly switch between different profiles, select random cosmetics from your collection, and more.
 
 This project utilizes [LCU](https://hextechdocs.dev/getting-started-with-the-lcu-api/) to read your cosmetics and select them in the client, and [CDragon](https://www.communitydragon.org/) to handle the images.
